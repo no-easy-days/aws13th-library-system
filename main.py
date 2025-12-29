@@ -17,7 +17,7 @@ def read_file(filename):
         print('File not found')
         return []
 
-def start_program():
+def get_menu_choice():
     print (
         "\n=== 도서관 관리 시스템 ===\n"
         "1. 도서 등록\n"
@@ -32,8 +32,10 @@ def start_program():
         choice = input("메뉴를 선택하세요: ")
         try:
             choice = int(choice)
+        # 문자 입력시 에러
         except ValueError:
             print("1 ~ 7 사이 숫자를 입력하세요.")
+        # 입력한 숫자의 범위가 맞지 않을 때 에러
         else:
             if 1 <= choice <= 7:
                 return choice
@@ -48,7 +50,7 @@ def main():
     #     print(book)
 
     # 선택지 주기
-    start_program()
+    get_menu_choice()
     # print(f"선택지: {start_program()}")
 
 
