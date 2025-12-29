@@ -1,16 +1,17 @@
 from models import *
 import csv
 
+from process_menu_choice import process_menu_choice
+
 
 def read_file(filename):
-    # TODO: 같은 책 들어왔을 때 처리 필요
     books = []
     try:
         with open(filename, newline='', encoding='utf-8') as f:
             reader = csv.reader(f)
             next(reader)
             for title, author, isbn in reader:
-                books.append(Book(title, author, isbn))
+                books.append(Book(title, author, isbn)) # 고민: 이걸 add_book method로 바꾸면 통일성은 있는데 결합도가 높아짐.
         print("\n[System] books.csv 에서 도서 데이터를 불러왔습니다.")
         return books
     except FileNotFoundError:
@@ -34,28 +35,25 @@ def get_menu_choice():
             choice = int(choice)
         # 문자 입력시 에러
         except ValueError:
-            print("1 ~ 7 사이 숫자를 입력하세요.")
+            print("[ERROR] 1 ~ 7 사이 숫자를 입력하세요.")
         # 입력한 숫자의 범위가 맞지 않을 때 에러
         else:
             if 1 <= choice <= 7:
                 return choice
-            print("1 ~ 7 사이 숫자를 입력하세요.")
-
+            print("[ERROR] 1 ~ 7 사이 숫자를 입력하세요.")
 
 
 def main():
     # 파일 읽기
     books = read_file('books.csv')
-    # for book in books[:3]:
-    #     print(book)
+    library = Library(books)
 
     # 선택지 주기
-    get_menu_choice()
-    # print(f"선택지: {start_program()}")
-
-
-    # 선택지 별 기능 구현
-
+    while True:
+        choice = get_menu_choice()
+        if choice == 7:
+            break
+        process_menu_choice(library, choice)
 
 
 if __name__ == "__main__":
