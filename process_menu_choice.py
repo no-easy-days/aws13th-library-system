@@ -1,5 +1,3 @@
-from isoduration.parser.util import is_number
-
 from models import Book, Library
 
 def register_book(library):
@@ -23,11 +21,16 @@ def register_book(library):
         break
 
 
+# def book_list(library):
+
+
+
 def process_menu_choice(library, choice):
     if choice == 1:
         register_book(library)
     elif choice == 2:
-        return library
+        # TODO: 여유 있으면 출력 서식 지정
+        library.book_list()
     elif choice == 3:
         return library
     elif choice == 4:

@@ -27,3 +27,10 @@ class Library:
 
     def add_book(self, new_book):
         self.books.append(new_book)
+
+    def book_list(self):
+        if not self.books:
+            print("[ERROR] 등록된 도서가 없습니다.")
+            return
+        for book in self.books:
+            print(str(book))
