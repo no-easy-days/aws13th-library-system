@@ -5,11 +5,6 @@ def csv_to_list(filename):
     with open(filename, "r", encoding="utf-8") as file:
         reader = csv.reader(file)
         return list(reader)
-    
-# csv 파일에 리스트를 저장하는 함수
-def list_to_csv(data, filename):
-    with open(filename, "w", encoding="utf-8", newline='') as file:
-        writer = csv.writer(file)
 
 # 임시 클래스 정의 추후 수정 필요
 class Book:
@@ -20,7 +15,10 @@ class Book:
         self.is_borrowed = is_borrowed
         
     def __str__(self):
-        return f"{self.title} by {self.author} (ISBN: {self.isbn})"
+        if self.is_borrowed:
+            return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출 중"
+        else:
+            return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출 가능"
         
      
 class Member:
@@ -62,13 +60,20 @@ library = Library()
 # csv 파일에서 책 데이터 불러오기
 init_data = csv_to_list("books.csv")
 for row in init_data:
-    title = row[0]
-    author = row[1]
-    isbn = row[2]
-    book = Book(title, author, isbn)
+    book = Book(row[0], row[1], row[2])
     library.add_book(book)
 
 # # 현재까지 추가된 책 목록 출력
 # for book in library.books:
 #     print(book)
 
+# 구현해야할 기능 : 도서 등록: 제목, 저자, ISBN 입력 받아 저장
+# title = input("책 제목을 입력하세요: ")
+# author = input("책 저자를 입력하세요: ")
+# isbn = input("책 ISBN을 입력하세요: ")
+# new_book = Book(title, author, isbn)
+# library.add_book(new_book)
+# print(f"'{new_book.title}' 책이 등록되었습니다.")
+
+for book in library.books:
+   print(book)
