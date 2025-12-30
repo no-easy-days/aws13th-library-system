@@ -129,3 +129,11 @@ if member_name in library.members:
         print("해당 ISBN의 도서를 찾을 수 없습니다.")
 else:
     print("해당 이름의 회원을 찾을 수 없습니다.")
+    
+# 구현해야할 기능 : 도서 검색 : 책 제목의 일부를 입력하면 해당 문자열이 포함된 도서 목록 출력
+book_title_section = input("검색할 책 제목의 일부를 입력하세요: ")
+print(f"'{book_title_section}'이(가) 포함된 도서 목록:")
+for book in library.books:
+    if book_title_section in book.title:
+        print(book)
+    
