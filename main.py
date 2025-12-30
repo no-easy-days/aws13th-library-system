@@ -79,3 +79,8 @@ print("현재 등록된 도서 목록:")
 for book in library.books:
     print(book)
 
+# 구현해야할 기능 : 회원 등록: 이름, 전화번호 입력 받아 저장
+name = input("회원 이름을 입력하세요: ")
+phone = input("회원 전화번호를 입력하세요: ")
+new_member = Member(name, phone, [])
+library.add_member(new_member)
