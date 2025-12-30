@@ -137,3 +137,6 @@ for book in library.books:
     if book_title_section in book.title:
         print(book)
     
+# 구현해야할 기능 : 종료 : 프로그램 종료
+print("프로그램을 종료합니다.")
+exit()
