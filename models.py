@@ -51,7 +51,7 @@ class Library:
     def borrow_book(self, name, isbn):
         # 대출 메소드
         for key in self.members:
-            print(key)   # 김영원
+            print(key)
             if name not in key:
                 print("회원이 없습니다.")
                 return
