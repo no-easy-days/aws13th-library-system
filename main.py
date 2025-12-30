@@ -16,10 +16,9 @@ class Book:
         
     def __str__(self):
         if self.is_borrowed:
-            return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출 중"
+            return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출중"
         else:
             return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출 가능"
-        
      
 class Member:
     def __init__(self, name,phone,borrowed_books):
@@ -68,12 +67,15 @@ for row in init_data:
 #     print(book)
 
 # 구현해야할 기능 : 도서 등록: 제목, 저자, ISBN 입력 받아 저장
-# title = input("책 제목을 입력하세요: ")
-# author = input("책 저자를 입력하세요: ")
-# isbn = input("책 ISBN을 입력하세요: ")
-# new_book = Book(title, author, isbn)
-# library.add_book(new_book)
-# print(f"'{new_book.title}' 책이 등록되었습니다.")
+title = input("책 제목을 입력하세요: ")
+author = input("책 저자를 입력하세요: ")
+isbn = input("책 ISBN을 입력하세요: ")
+new_book = Book(title, author, isbn)
+library.add_book(new_book)
+print(f"'{new_book.title}' 책이 등록되었습니다.")
 
+# 구현해야할 기능 : 현재 등록된 도서 목록 출력
+print("현재 등록된 도서 목록:")
 for book in library.books:
-   print(book)
+    print(book)
+
