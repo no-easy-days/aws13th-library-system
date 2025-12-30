@@ -106,3 +106,26 @@ if member_name in library.members:
 else:
     print("해당 이름의 회원을 찾을 수 없습니다.")
     
+# 구현해야할 기능 : 도서 반납 : 회원 이름과 isbn 입력 받아 해당 회원 존재하고, 도서가 대출 중이면 반납 처리
+member_name = input("사용자 이름을 입력하세요: ")
+isbn_to_return = input("반납할 책의 ISBN을 입력하세요: ")
+# 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 중인지 상태 확인
+if member_name in library.members:
+    member = library.members[member_name]
+    # 도서 존재 여부
+    book_to_return = None
+    for book in library.books:
+        if book.isbn == isbn_to_return:
+            book_to_return = book
+            break
+    if book_to_return:
+        # 도서 대출 상태 확인
+        if book_to_return.is_borrowed:
+            library.return_book(member, book_to_return)
+            print(f">> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
+        else:
+            print("해당 도서는 대출 중이 아닙니다.")
+    else:
+        print("해당 ISBN의 도서를 찾을 수 없습니다.")
+else:
+    print("해당 이름의 회원을 찾을 수 없습니다.")
