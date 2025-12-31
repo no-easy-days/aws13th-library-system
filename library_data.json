@@ -79,51 +79,8 @@
       "is_borrowed": false,
       "borrowed_by": null,
       "borrowed_date": null
-    },
-    {
-      "title": "도서",
-      "author": "저자",
-      "isbn": "1",
-      "is_borrowed": true,
-      "borrowed_by": "전화번호",
-      "borrowed_date": "2025-12-31T11:53:05.541268"
-    },
-    {
-      "title": "도서2",
-      "author": "저자2",
-      "isbn": "2",
-      "is_borrowed": true,
-      "borrowed_by": "이이동준",
-      "borrowed_date": "2025-12-31T11:25:18.356018"
-    },
-    {
-      "title": "도서3",
-      "author": "저자3",
-      "isbn": "3",
-      "is_borrowed": false,
-      "borrowed_by": null,
-      "borrowed_date": null
     }
   ],
   "members": [
-    {
-      "name": "이이동준",
-      "phone": "123",
-      "borrowed_books": [
-        "2"
-      ]
-    },
-    {
-      "name": "랄프",
-      "phone": "3",
-      "borrowed_books": []
-    },
-    {
-      "name": "이름",
-      "phone": "전화번호",
-      "borrowed_books": [
-        "1"
-      ]
-    }
   ]
 }
