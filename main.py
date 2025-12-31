@@ -14,7 +14,7 @@ def main():
     initial_book = file_load('books.csv')
     for book in initial_book:
         my_library.add_book(book)
-        # print(book)               # 일단 Library에 들어는 간다.
+                               # 일단 Library에 들어는 간다.
     while True:
         print("=== 도서관 관리 시스템 ===")
         print("1. 도서 등록")
@@ -24,12 +24,16 @@ def main():
         print("5. 반납")
         print("6. 검색")
         print("7. 종료")
-        a = int(input("메뉴를 선택하세요 : "))
+        try:
+            a = int(input("메뉴를 선택하세요 : "))
+        except ValueError:
+            print("숫자로 입력해주세요")
+            continue
         if a == 1:
             # 도서 등록 메소드
-            title = input("책 제목")
-            author = input("저자")
-            isbn = input("ISBN")
+            title = input("책 제목 : ")
+            author = input("저자 : ")
+            isbn = input("ISBN : ")
             my_library.register_book(title,author,isbn)
         elif a == 2:
             # 도서 목록 메소드
@@ -55,11 +59,12 @@ def main():
              ch = input("책 제목의 일부를 입력하세요 : ")
              my_library.search_book(ch)
         else:
+            print("프로그램을 종료합니다.")
             break
 
 
-
-main()
+if __name__ == "__main__":
+    main()
 
 
 
