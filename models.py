@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import json
 from exception import BookNotFoundException, BookAlreadyBorrowedException, MemberNotFoundException, \
-    BookNotBorrowedException, UnauthorizedReturnException
+    BookNotBorrowedException, UnauthorizedReturnException, DataInconsistencyException
 
 
 @dataclass
@@ -159,9 +159,7 @@ class Library:
         overdue_days = book.returning(self.loan_deadline)
         if not member.return_book(isbn):
             # 데이터 불일치: Book은 대출중인데 Member 목록에 없음
-            raise RuntimeError(
-                f"데이터 불일치 감지: '{book.title}' 책이 회원({member.phone})의 대출 목록에 없습니다."
-            )
+            raise UnauthorizedReturnException(book.title,member, member.phone)
 
         print(f"\n>> '{member.name}'님이 '{book.title}' ({isbn})을 반납했어요.")
 
