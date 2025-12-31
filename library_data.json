@@ -1,0 +1,129 @@
+{
+  "books": [
+    {
+      "title": "점프 투 파이썬",
+      "author": "박응용",
+      "isbn": "9791163030911",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "클린 코드",
+      "author": "로버트 C. 마틴",
+      "isbn": "9788966260959",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "이것이 취업을 위한 코딩 테스트다",
+      "author": "나동빈",
+      "isbn": "9791162243077",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "데미안",
+      "author": "헤르만 헤세",
+      "isbn": "9788937460449",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "지적 대화를 위한 넓고 얕은 지식 1",
+      "author": "채사장",
+      "isbn": "9791181301072",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "사피엔스",
+      "author": "유발 하라리",
+      "isbn": "9788934972464",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "미움받을 용기",
+      "author": "기시미 이치로",
+      "isbn": "9788996991342",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "코스모스",
+      "author": "칼 세이건",
+      "isbn": "9788983711892",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "나미야 잡화점의 기적",
+      "author": "히가시노 게이고",
+      "isbn": "9788972756194",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "총 균 쇠",
+      "author": "재레드 다이아몬드",
+      "isbn": "9788970129015",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    },
+    {
+      "title": "도서",
+      "author": "저자",
+      "isbn": "1",
+      "is_borrowed": true,
+      "borrowed_by": "전화번호",
+      "borrowed_date": "2025-12-31T11:53:05.541268"
+    },
+    {
+      "title": "도서2",
+      "author": "저자2",
+      "isbn": "2",
+      "is_borrowed": true,
+      "borrowed_by": "이이동준",
+      "borrowed_date": "2025-12-31T11:25:18.356018"
+    },
+    {
+      "title": "도서3",
+      "author": "저자3",
+      "isbn": "3",
+      "is_borrowed": false,
+      "borrowed_by": null,
+      "borrowed_date": null
+    }
+  ],
+  "members": [
+    {
+      "name": "이이동준",
+      "phone": "123",
+      "borrowed_books": [
+        "2"
+      ]
+    },
+    {
+      "name": "랄프",
+      "phone": "3",
+      "borrowed_books": []
+    },
+    {
+      "name": "이름",
+      "phone": "전화번호",
+      "borrowed_books": [
+        "1"
+      ]
+    }
+  ]
+}
