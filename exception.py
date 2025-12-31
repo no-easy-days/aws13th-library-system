@@ -45,6 +45,17 @@ class UnauthorizedReturnException(LibraryBasicException):
         )
 
 
+class DataInconsistencyException(LibraryBasicException):
+    """Book과 Member 간 데이터 불일치가 발생했을 때의 예외"""
+    def __init__(self, book_title, member_phone):
+        self.book_title = book_title
+        self.member_phone = member_phone
+        super().__init__(
+            f"데이터 불일치 감지: '{book_title}' 책이 회원({member_phone})의 대출 목록에 없습니다. "
+            f"시스템 관리자에게 문의하세요."
+        )
+
+
 class InvalidInputBasicException(LibraryBasicException):
     """잘못된 입력이 들어왔을 때 발생하는 예외"""
     def __init__(self, message="잘못된 입력입니다."):

@@ -1,7 +1,7 @@
 from models import Library, Book, Member
 from utils import get_valid_input, load_books_from_csv, print_menu, print_separator, validate_int_format
 from exception import BookNotFoundException, BookAlreadyBorrowedException, MemberNotFoundException, \
-    InvalidInputBasicException, BookNotBorrowedException, UnauthorizedReturnException
+    InvalidInputBasicException, BookNotBorrowedException, UnauthorizedReturnException, DataInconsistencyException
 import os
 
 
@@ -143,7 +143,7 @@ def return_book(library):
         print(f"오류: {e}")
     except UnauthorizedReturnException as e:
         print(f"오류: {e}")
-    except RuntimeError as e:
+    except DataInconsistencyException as e:
         print(f"시스템 오류: {e}")
     except Exception as e:
         print(f"예상치 못한 오류: {e}")

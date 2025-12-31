@@ -65,7 +65,6 @@ class Member:
 
 class Library:
     """전체 도서관 시스템을 관리하는 클래스"""
-
     def __init__(self, data_file='library_data.json',loan_deadline=7):
         """도서관 초기화"""
         self.books = {}
@@ -86,7 +85,7 @@ class Library:
     def add_member(self, member):
         """도서관에 회원 추가"""
         if member.phone in self.members:
-            print(f"비상! 전화번호 {member.phone}는 이미 가입되어있어여.")
+            print(f"비상! 전화번호 {member.phone}는 이미 가입되어있어요.")
         else:
             self.members[member.phone] = member
             print(f"{member.name}님이 회원으로 등록되었습니다.🫡🫡🫡")
@@ -159,14 +158,14 @@ class Library:
         overdue_days = book.returning(self.loan_deadline)
         if not member.return_book(isbn):
             # 데이터 불일치: Book은 대출중인데 Member 목록에 없음
-            raise UnauthorizedReturnException(book.title,member, member.phone)
+            raise DataInconsistencyException(book.title, member.phone)
 
         print(f"\n>> '{member.name}'님이 '{book.title}' ({isbn})을 반납했어요.")
 
         if overdue_days > 0:
             print(f"!!!!!!연체를 {overdue_days}일 이나;;;;")
         else:
-            print(f"  💩정상 반납되었습니다💩")
+            print("  💩정상 반납되었습니다💩")
         print()
 
         return True
