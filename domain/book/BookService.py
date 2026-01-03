@@ -45,7 +45,7 @@ class BookService:
         #ISBN은 고유해야 함 (Unique Key)
         for existing_book in self.books:
             if existing_book.isbn == new_book.isbn:
-                raise BookAlreadyExists(existing_book)
+                raise BookAlreadyExists(new_book)
 
         #매우 중요!! 현재 메모리상에 추가된 book을 저장
         self.books.append(new_book)
