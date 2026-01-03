@@ -15,9 +15,9 @@ def load_books(file_path):
                     row['author'].strip(),
                     row['isbn'].strip()
                 ))
-            except FileNotFoundError:
+            except KeyError as err:
                 #헤더명 틀렸을 발생하는 내장 에러
-                raise KeyError("CSV 헤더 형식이 올바르지 않습니.")
+                raise KeyError("CSV 헤더 형식이 올바르지 않습니다.") from err
     return books
 
 

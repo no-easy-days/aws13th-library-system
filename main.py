@@ -47,7 +47,7 @@ def main():
             elif number == '5':
                 # TODO: 회원 이름과 ISBN 입력받아 lib.return_book() 호출
                 name = get_input("사용자 이름: ")
-                isbn = get_input("대출할 도서의 ISBN: ")
+                isbn = get_input("반납할 도서의 ISBN: ")
                 lib.return_book(name, isbn)
                 pass
             elif number == '6':

@@ -21,7 +21,7 @@ class Member:
         self.name = name
         self.phone = phone
         self.borrowed_books = []
-        self.borrowe_dates = {} # ISBN을 key 값으로, 대출 시각을 value로 저장하는 딕셔너리
+        self.borrowed_dates = {} # ISBN을 key 값으로, 대출 시각을 value로 저장하는 딕셔너리
 
 class Library:
     def __init__(self):
@@ -52,9 +52,9 @@ class Library:
         print(f"{name} 회원님 등록이 완료되었습니다.")
 
     def borrow_book(self, name, isbn):
-        member = self.members.get(name)
         if name not in self.members:
             raise KeyError(f"{name} 님을 찾을 수 없습니다.")
+        member = self.members.get[name]
 
         for book in self.books:
             if book.isbn == isbn:
@@ -76,17 +76,20 @@ class Library:
 
         for book in self.books:
             if book.isbn == isbn:
-                if not book.is_borrowed == True:
+                if not book.is_borrowed:
                     raise LookupError(f"{book.title}은 대출된 도서가 아닙니다.")
 
                 borrow_date = member.borrowed_dates.get(isbn)
                 if borrow_date:
                     days_passed = (datetime.now() - borrow_date).days
                     if days_passed > 7:
-                        print(f"연체되었습니다! (대출 후 {days_passed}일 경과")
+                        print(f"연체되었습니다! (대출 후 {days_passed}일 경과)")
 
                 book.is_borrowed = False
-                member.borrowed_books.remove(book)
+                if book in member.borrowed_books:
+                    member.borrowed_books.remove(book)
+                if isbn in member.borrowed_dates:
+                    del member.borrowed_dates[isbn]
                 print(f"{member.name} 님이 {book.title} 을 반납하셨습니다.")
                 return
 
