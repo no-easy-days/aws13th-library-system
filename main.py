@@ -1,23 +1,15 @@
 # from models import *
-# import csv
+from exception import LibraryError
+from library import Library
+from utils import load_books
+
+
 #
 # from process_menu_choice import process_menu_choice
 #
 #
 #
-# def read_file(filename):
-#     books = []
-#     try:
-#         with open(filename, newline='', encoding='utf-8') as f:
-#             reader = csv.reader(f)
-#             next(reader)
-#             for title, author, isbn in reader:
-#                 books.append(Book(title, author, isbn)) # 고민: 이걸 add_book method로 바꾸면 통일성은 있는데 결합도가 높아짐.
-#         print("\n[System] books.csv 에서 도서 데이터를 불러왔습니다.")
-#         return books
-#     except FileNotFoundError:
-#         print('File not found')
-#         return []
+
 #
 # def get_menu_choice():
 #     print (
@@ -45,10 +37,16 @@
 #
 #
 def main():
-    print("main")
-#     # 파일 읽기
-#     books = read_file('books.csv')
-#     library = Library(books)
+    library = Library()
+
+    # 파일 읽어오기
+    try:
+        count = load_books(library, "books.csv")
+    except LibraryError as e:
+        print(f"[ERROR] {e}")
+        return
+    print(f"\n[System] books.csv 에서 도서 데이터를 불러왔습니다. (총 {count}권)")
+
 #
 #     # 선택지 주기
 #     while True:
