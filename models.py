@@ -12,6 +12,7 @@ class Book:
             status = "대충 가능"
         return f'[{self.isbn}] {self.title} / {self.author} ({status})'
 
+#
 class Member:
     def __init__(self, name, phone):
         self.name = name
