@@ -22,4 +22,4 @@ def load_books(library, filename: str) -> int:
                 count += 1
         return count
     except FileNotFoundError as e:
-        raise DataLoadError("파일을 찾을 수 없습니다.") from e
+        raise DataLoadError() from e
