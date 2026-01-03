@@ -12,14 +12,14 @@ def register_book(library) -> Book:
             print("[ERROR] ISBN은 숫자만 입력해주세요.")
             continue
         if len(isbn) != 13:
-            print("[ERROR] ISBN은 13자리 입니다.")
+            print("[ERROR] ISBN은 13자리 숫자 입니다.")
             continue
         try:
             library.add_book(Book(title, author, isbn))
         except DuplicateISBNError as e:
             print(f"[ERROR] {e}")
             continue
-        print("\n도서를 등록하였습니다.")
+        print("\n[INFO] 도서를 등록하였습니다.")
         break
 
 
@@ -48,12 +48,12 @@ def register_book(library) -> Book:
 # #     book_isbn = input("도서 isbn: ")
 #
 #
-def process_menu_choice(library, choice):
+def process_menu_choice(library, choice: int) -> None:
     if choice == 1:
         register_book(library)
     elif choice == 2:
         # TODO: 여유 있으면 출력 서식 지정
-        # library.book_list()
+        library.book_list()
         pass
     elif choice == 3:
         # register_member(library)
