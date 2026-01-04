@@ -4,7 +4,17 @@ from utils import csv_to_list
 # Library 인스턴스 생성 및 예제 사용
 library = Library()
 # csv 파일에서 책 데이터 불러오기
-init_data = csv_to_list("books.csv")
+try:
+    init_data = csv_to_list("books.csv")
+except FileNotFoundError as e:
+    print(f"\n[ERROR] {e}")
+    print("프로그램을 종료합니다.")
+    exit()
+except ValueError as e:
+    print(f"\n[ERROR] {e}")
+    print("프로그램을 종료합니다.")
+    exit()
+
 
 for row in init_data[1:]:  # 첫 번째 행은 헤더이므로 제외
     book = Book(row[0], row[1], row[2])
