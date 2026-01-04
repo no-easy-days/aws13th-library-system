@@ -1,0 +1,75 @@
+{
+  "members": {
+    "admin": {
+      "member_id": "admin",
+      "name": "백시관",
+      "phone": "010-1234-5678",
+      "password": "1234567890",
+      "role": "admin"
+    }
+  },
+  "books": {
+    "9791163030911": {
+      "title": "점프 투 파이썬",
+      "author": "박응용",
+      "isbn": "9791163030911",
+      "borrowed_by": null
+    },
+    "9788966260959": {
+      "title": "클린 코드",
+      "author": "로버트 C. 마틴",
+      "isbn": "9788966260959",
+      "borrowed_by": null
+    },
+    "9791162243077": {
+      "title": "이것이 취업을 위한 코딩 테스트다",
+      "author": "나동빈",
+      "isbn": "9791162243077",
+      "borrowed_by": null
+    },
+    "9788937460449": {
+      "title": "데미안",
+      "author": "헤르만 헤세",
+      "isbn": "9788937460449",
+      "borrowed_by": null
+    },
+    "9791181301072": {
+      "title": "지적 대화를 위한 넓고 얕은 지식 1",
+      "author": "채사장",
+      "isbn": "9791181301072",
+      "borrowed_by": null
+    },
+    "9788934972464": {
+      "title": "사피엔스",
+      "author": "유발 하라리",
+      "isbn": "9788934972464",
+      "borrowed_by": null
+    },
+    "9788996991342": {
+      "title": "미움받을 용기",
+      "author": "기시미 이치로",
+      "isbn": "9788996991342",
+      "borrowed_by": null
+    },
+    "9788983711892": {
+      "title": "코스모스",
+      "author": "칼 세이건",
+      "isbn": "9788983711892",
+      "borrowed_by": null
+    },
+    "9788972756194": {
+      "title": "나미야 잡화점의 기적",
+      "author": "히가시노 게이고",
+      "isbn": "9788972756194",
+      "borrowed_by": null
+    },
+    "9788970129015": {
+      "title": "총 균 쇠",
+      "author": "재레드 다이아몬드",
+      "isbn": "9788970129015",
+      "borrowed_by": null
+    }
+  },
+  "requests": [],
+  "next_request_id": 1
+}
