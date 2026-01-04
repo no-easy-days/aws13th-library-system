@@ -1,4 +1,3 @@
-
 class LibraryError(Exception):
     """ 예외처리 최상위 클래스 """
     pass

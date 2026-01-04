@@ -1,4 +1,4 @@
-from exception import (
+from src.exception import (
     DuplicateISBNError,
     LibraryError,
     BookNotFoundError,
@@ -6,7 +6,7 @@ from exception import (
     BookNotBorrowedError,
     BookBorrowedByOtherMemberError
 )
-from models import Book, Member
+from src.models import Book, Member
 
 
 def register_book(library) -> None:
@@ -193,7 +193,7 @@ def handle_search_book(library) -> None:
 
 
 
-def process_menu_choice(library, choice: int) -> None:
+def dispatch_menu_actions(library, choice: int) -> None:
     if choice == 1:
         register_book(library)
     elif choice == 2:

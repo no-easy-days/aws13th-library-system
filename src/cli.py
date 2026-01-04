@@ -1,10 +1,10 @@
-# from models import *
-from exception import LibraryError
-from library import Library
-from utils import load_books
+# 메뉴 + 실행 흐름 담당
+from src.exception import LibraryError
+from src.library import Library
+from src.utils import load_books
 
+from src.menu_actions import dispatch_menu_actions
 
-from process_menu_choice import process_menu_choice
 
 def get_menu_choice() -> int:
     """
@@ -35,13 +35,12 @@ def get_menu_choice() -> int:
             return choice
         print("[ERROR] 1 ~ 7 사이 숫자를 입력하세요.")
 
-
-def main():
+def run():
     library = Library()
 
     # 파일 읽어오기
     try:
-        count = load_books(library, "books.csv")
+        count = load_books(library, "../data/books.csv")
     except LibraryError as e:
         print(f"[ERROR] {e}")
         return
@@ -52,8 +51,4 @@ def main():
         choice = get_menu_choice()
         if choice == 7:
             break
-        process_menu_choice(library, choice)
-
-
-if __name__ == "__main__":
-    main()
+        dispatch_menu_actions(library, choice)
