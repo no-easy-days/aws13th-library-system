@@ -33,12 +33,8 @@ class Library:
         """
         return name in self.members
 
-    def book_list(self) -> None:
-        if not self.books:
-            print("[ERROR] 등록된 도서가 없습니다.")
-            return
-        for book in self.books.values():
-            print(book)
+    def book_list(self) -> list:
+        return list(self.books.values())
 
     def borrow_book(self, name: str, isbn: str) -> None:
         if name not in self.members:

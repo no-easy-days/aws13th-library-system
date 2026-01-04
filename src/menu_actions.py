@@ -33,6 +33,52 @@ def register_book(library) -> None:
         print("\n[INFO] 도서를 등록하였습니다.")
         return
 
+def print_book_table(books: list, header: str) -> None:
+    """
+    도서 목록/검색 결과를 공통 테이블 포맷으로 출력한다.
+
+    :param books: Book 객체 리스트
+    :param header: 출력 헤더 (ex. "[도서 목록]", "[검색 결과]")
+    :return:
+    """
+    TITLE_WIDTH = 32
+    AUTHOR_WIDTH = 22
+    ISBN_WIDTH = 13
+    STATUS_WIDTH = 10
+
+    def format_text(text: str, width: int) -> str:
+        if len(text) > width:
+            return text[: width - 3] + "..."
+        return text.ljust(width)
+
+    print(f"\n{header}")
+    print("=" * (TITLE_WIDTH + ISBN_WIDTH + STATUS_WIDTH + AUTHOR_WIDTH + 16))
+    print(
+        f"{'ISBN'.ljust(ISBN_WIDTH)}  "
+        f"{'제목'.ljust(TITLE_WIDTH)}  "
+        f"{'저자'.ljust(AUTHOR_WIDTH)}  "
+        f"{'상태'.ljust(STATUS_WIDTH)}"
+    )
+    print("=" * (TITLE_WIDTH + ISBN_WIDTH + STATUS_WIDTH + AUTHOR_WIDTH + 16))
+    for book in books:
+        status = "대출중" if book.is_borrowed else "대출가능"
+        print(
+            f"{format_text(book.isbn, ISBN_WIDTH)}  "
+            f"{format_text(book.title, TITLE_WIDTH)}  "
+            f"{format_text(book.author, AUTHOR_WIDTH)}  "
+            f"{format_text(status, STATUS_WIDTH)}"
+        )
+
+    print("=" * (TITLE_WIDTH + ISBN_WIDTH + STATUS_WIDTH + AUTHOR_WIDTH + 16))
+    print(f"총 {len(books)}권")
+
+
+def book_list(books: list) -> None:
+    if not books:
+        print("[ERROR] 등록된 도서가 없습니다.")
+        return
+    print_book_table(books, "[도서 목록]")
+
 
 def register_member(library) -> None:
     """
@@ -142,19 +188,14 @@ def handle_search_book(library) -> None:
     if not result:
         print("\n[INFO] 검색 결과가 없습니다.")
         return
-
-    print(f"\n[INFO] 검색 결과: {len(result)}권")
-    for book in result:
-        print(book)
-
+    print_book_table(result, "[검색 결과]")
 
 
 def dispatch_menu_actions(library, choice: int) -> None:
     if choice == 1:
         register_book(library)
     elif choice == 2:
-        # TODO: 여유 있으면 출력 서식 지정
-        library.book_list()
+        book_list(library.book_list())
     elif choice == 3:
         register_member(library)
     elif choice == 4:
