@@ -1,5 +1,5 @@
 from models import Book, Member, Library
-from utils import csv_to_list
+from utils import csv_to_list, input_non_empty
     
 # Library 인스턴스 생성 및 예제 사용
 library = Library()
@@ -28,11 +28,23 @@ while True:
     for (i, item) in enumerate(arr, start=1):
         print(f"{i}. {item}")
     choice = input("메뉴를 선택하세요: ").strip()
+    
+    if not choice.isdigit():
+        print("\n[ERROR] 숫자를 입력해주세요.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+        continue
+    
+    if not (1 <= int(choice) <= 7):
+        print("\n[ERROR] 1부터 7 사이의 번호를 입력해주세요.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+        continue
+        
     if choice == "1":
         # 도서 등록 기능 구현
-        title = input("\n책 제목을 입력하세요: ")
-        author = input("책 저자를 입력하세요: ")
-        isbn = input("책 ISBN을 입력하세요: ")
+        title = input_non_empty("\n책 제목을 입력하세요: ", "책 제목은 필수 입력값입니다.")
+        author = input_non_empty("책 저자를 입력하세요: ", "책 저자는 필수 입력값입니다.")
+        isbn = input_non_empty("책 ISBN을 입력하세요: ", "ISBN은 필수 입력값입니다.")
+
         new_book = Book(title, author, isbn)
         library.add_book(new_book)
         print("\n[완료] 도서 등록이 완료되었습니다.")
@@ -45,16 +57,17 @@ while True:
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "3":
         # 회원 등록 기능 구현
-        name = input("\n회원 이름을 입력하세요: ").strip()
-        phone = input("회원 전화번호를 입력하세요: ").strip()
+        name = input_non_empty("\n회원 이름을 입력하세요: ", "회원 이름은 필수 입력값입니다.")
+        phone = input_non_empty("회원 전화번호를 입력하세요: ", "회원 전화번호는 필수 입력값입니다.")
         new_member = Member(name, phone, [])
         library.add_member(new_member)
         print("\n[완료] 회원 등록이 완료되었습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "4":
         # 도서 대출 기능 구현
-        member_name = input("\n사용자 이름을 입력하세요: ").strip()
-        isbn_to_borrow = input("대출할 책의 ISBN을 입력하세요: ").strip()
+        member_name = input_non_empty("\n회원 이름을 입력하세요: ", "회원 이름은 필수 입력값입니다.")
+        isbn_to_borrow = input_non_empty("대출할 책의 ISBN을 입력하세요: ", "ISBN은 필수 입력값입니다.")
+
         # 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 가능산 상태 확인
         # 회원 존재 여부
         if member_name in library.members:
@@ -79,8 +92,8 @@ while True:
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "5":
         # 도서 반납 기능 구현
-        member_name = input("\n사용자 이름을 입력하세요: ").strip()
-        isbn_to_return = input("반납할 책의 ISBN을 입력하세요: ").strip()
+        member_name = input_non_empty("\n회원 이름을 입력하세요: ", "회원 이름은 필수 입력값입니다.")
+        isbn_to_return = input_non_empty("반납할 책의 ISBN을 입력하세요: ", "ISBN은 필수 입력값입니다.")   
         # 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 중인지 상태 확인
         if member_name in library.members:
             member = library.members[member_name]
@@ -104,7 +117,8 @@ while True:
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "6":
         # 도서 검색 기능 구현
-        book_title_section = input("\n검색할 책 제목의 일부를 입력하세요: ").strip()
+        book_title_section = input_non_empty("\n검색할 책 제목의 일부를 입력하세요: ", "검색어를 입력해주세요.")
+
         print(f"\n'{book_title_section}'이(가) 포함된 도서 목록:")
         found = False
         for book in library.books:

@@ -13,3 +13,11 @@ def csv_to_list(filename):
         raise ValueError(f"{filename} 파일에 도서 데이터가 없습니다.")
     
     return data
+
+def input_non_empty(prompt, error_message):
+    while True:
+        value = input(prompt).strip()
+        if value:
+            return value
+        else:
+            print(f"\n[ERROR] {error_message}")
