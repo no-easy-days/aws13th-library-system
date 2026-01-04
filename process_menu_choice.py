@@ -174,6 +174,24 @@ def handle_return_book(library) -> None:
         return
 
 
+def handle_search_book(library) -> None:
+    while True:
+        keyword = input("검색어를 입력하세요: ").strip()
+        if not keyword:
+            print("[ERROR] 검색어를 입력해주세요.")
+            continue
+        break
+
+    result = library.search_book(keyword)
+    if not result:
+        print("\n[INFO] 검색 결과가 없습니다.")
+        return
+
+    print(f"\n[INFO] 검색 결과: {len(result)}권")
+    for book in result:
+        print(book)
+
+
 
 def process_menu_choice(library, choice: int) -> None:
     if choice == 1:
@@ -188,4 +206,4 @@ def process_menu_choice(library, choice: int) -> None:
     elif choice == 5:
         handle_return_book(library)
     elif choice == 6:
-        pass
+        handle_search_book(library)

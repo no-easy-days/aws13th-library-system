@@ -65,3 +65,12 @@ class Library:
             raise BookBorrowedByOtherMemberError(isbn)
         book.is_borrowed = False
         book.borrowed_by = None
+
+    def search_book(self, keyword: str) -> list:
+        def normalize(s: str) -> str:
+            return "".join(s.split()).casefold()
+        key = normalize(keyword)
+        return [
+            book for book in self.books.values()
+            if key in normalize(book.title)
+        ]
