@@ -61,12 +61,11 @@ def print_book_table(books: list, header: str) -> None:
     )
     print("=" * (TITLE_WIDTH + ISBN_WIDTH + STATUS_WIDTH + AUTHOR_WIDTH + 16))
     for book in books:
-        status = "대출중" if book.is_borrowed else "대출가능"
         print(
             f"{format_text(book.isbn, ISBN_WIDTH)}  "
             f"{format_text(book.title, TITLE_WIDTH)}  "
             f"{format_text(book.author, AUTHOR_WIDTH)}  "
-            f"{format_text(status, STATUS_WIDTH)}"
+            f"{format_text(book.status, STATUS_WIDTH)}"
         )
 
     print("=" * (TITLE_WIDTH + ISBN_WIDTH + STATUS_WIDTH + AUTHOR_WIDTH + 16))
@@ -98,7 +97,7 @@ def register_member(library) -> None:
         name = prompt_input_valid("이름: ", validator=non_empty)
 
         if library.has_member(name):
-            print("[ERROR] 이미 등록된 회원 이름입니다.")
+            print("[ERROR] 이미 등록된 회원 입니다.")
             continue
         break
 
