@@ -213,4 +213,4 @@ def dispatch_menu_actions(library, choice: int) -> None:
     elif choice == 6:
         handle_search_book(library)
     else:
-        print(f"[ERROR] 유효하지 않은 메뉴 선택입니다.")
+        print("[ERROR] 유효하지 않은 메뉴 선택입니다.")
