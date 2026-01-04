@@ -55,7 +55,7 @@ class Library:
 
         book = None
         for b in member.borrowed_books:
-            if b.isbn == isbn:
+            if b.isbn.strip() == isbn.strip():
                 book = b
                 break
         if book is None:
