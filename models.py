@@ -42,3 +42,6 @@ class Library:
             member.borrowed_books.remove(book)
             return True
         return False
+    
+    def has_isvn(self, isbn):
+        return any(book.isbn == isbn for book in self.books)

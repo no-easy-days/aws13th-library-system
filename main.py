@@ -1,5 +1,5 @@
 from models import Book, Member, Library
-from utils import csv_to_list, input_non_empty, validate_phone, validate_name
+from utils import csv_to_list, input_non_empty, validate_phone, validate_name, validate_isbn
     
 # Library 인스턴스 생성 및 예제 사용
 library = Library()
@@ -45,6 +45,18 @@ while True:
         author = input_non_empty("책 저자를 입력하세요: ", "책 저자는 필수 입력값입니다.")
         isbn = input_non_empty("책 ISBN을 입력하세요: ", "ISBN은 필수 입력값입니다.")
 
+        try:
+            validate_isbn(isbn)
+        except ValueError as e:
+            print(f"\n[ERROR] {e}")
+            input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+            continue
+        
+        if library.has_isvn(isbn):
+            print("\n[ERROR] 이미 등록된 ISBN입니다.")
+            input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+            continue
+        
         new_book = Book(title, author, isbn)
         library.add_book(new_book)
         print("\n[완료] 도서 등록이 완료되었습니다.")

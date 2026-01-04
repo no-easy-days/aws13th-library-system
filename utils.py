@@ -31,3 +31,9 @@ def validate_phone(phone):
 def validate_name(name):
     if not name.replace(" ", "").isalpha():
         raise ValueError("이름은 한글 또는 영문자만 포함해야 합니다.")
+    
+def validate_isbn(isbn):
+    if not isbn.isdigit():
+        raise ValueError("ISBN은 숫자만 입력해야 합니다.")
+    if len(isbn) != 13:
+        raise ValueError("ISBN은 13자리 숫자여야 합니다.")
