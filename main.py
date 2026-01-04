@@ -52,18 +52,18 @@ while True:
             input("\n엔터를 누르면 메뉴로 돌아갑니다...")
             continue
         
-        if library.has_isvn(isbn):
+        if library.has_isbn(isbn):
             print("\n[ERROR] 이미 등록된 ISBN입니다.")
             input("\n엔터를 누르면 메뉴로 돌아갑니다...")
             continue
         
         new_book = Book(title, author, isbn)
         library.add_book(new_book)
-        print("\n[완료] 도서 등록이 완료되었습니다.")
+        print("\n[SUCCESS] 도서 등록이 완료되었습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "2":
         # 도서 목록 출력 기능 구현
-        print("\n현재 등록된 도서 목록:")
+        print("\n[INFO] 현재 등록된 도서 목록:")
         for book in library.books:
             print(book)
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
@@ -92,7 +92,7 @@ while True:
         
         new_member = Member(name, phone, [])
         library.add_member(new_member)
-        print("\n[완료] 회원 등록이 완료되었습니다.")
+        print("\n[SUCCESS] 회원 등록이 완료되었습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "4":
         # 도서 대출 기능 구현
@@ -117,11 +117,11 @@ while True:
                     print("\n[ERROR] 이미 이 책을 대출한 상태입니다.")
                 else:
                     library.borrow_book(member, book_to_borrow)
-                    print(f"\n>> '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
+                    print(f"\n[SUCCESS] '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
             else:
-                print("해당 ISBN의 도서를 찾을 수 없습니다.")
+                print("\n[ERROR] 해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
-            print("해당 이름의 회원을 찾을 수 없습니다.")
+            print("\n[ERROR] 해당 이름의 회원을 찾을 수 없습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "5":
         # 도서 반납 기능 구현
@@ -144,27 +144,25 @@ while True:
                     print("\n[ERROR] 이 회원이 대출한 책이 아닙니다.")
                 else:
                     library.return_book(member, book_to_return)
-                    print(f"\n>> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
+                    print(f"\n[SUCCESS] '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
             else:
-                print("해당 ISBN의 도서를 찾을 수 없습니다.")
+                print("\n[ERROR]해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
-            print("해당 이름의 회원을 찾을 수 없습니다.")
+            print("\n[ERROR] 해당 이름의 회원을 찾을 수 없습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "6":
         # 도서 검색 기능 구현
         book_title_section = input_non_empty("\n검색할 책 제목의 일부를 입력하세요: ", "검색어를 입력해주세요.")
 
-        print(f"\n'{book_title_section}'이(가) 포함된 도서 목록:")
+        print(f"\n[INFO] '{book_title_section}'이(가) 포함된 도서 목록:")
         found = False
         for book in library.books:
             if book_title_section in book.title:
                 print(book)
                 found = True
         if not found:
-            print("검색 결과가 없습니다.")
+            print("\n[INFO] 검색 결과가 없습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "7":
-        print("프로그램을 종료합니다.")
+        print("\n[System] 프로그램을 종료합니다.")
         break
-    else:
-        print("잘못된 선택입니다. 다시 시도하세요.")

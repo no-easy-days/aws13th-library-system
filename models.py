@@ -43,5 +43,5 @@ class Library:
             return True
         return False
     
-    def has_isvn(self, isbn):
+    def has_isbn(self, isbn):
         return any(book.isbn == isbn for book in self.books)
