@@ -25,3 +25,16 @@ class Member:
     def __str__(self) -> str:
         return f"{self.member_id} / {self.name} / {self.phone} / {self.role}"
 
+
+class BookRequest:
+    def __init__(self, request_id: str, member_id: str, title: str, author: str, isbn: str):
+        self.request_id = request_id
+        self.member_id = member_id
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self.status = "pending"  # pending, approved, rejected
+    
+    def __str__(self) -> str:
+        return f"[{self.status}] {self.title} / {self.author} / {self.isbn} (요청자: {self.member_id})"
+

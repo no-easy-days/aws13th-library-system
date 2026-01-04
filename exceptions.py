@@ -12,3 +12,15 @@ class DuplicateError(DomainError):
 
 class AuthenticationError(DomainError):
     """로그인 실패(인증 실패)"""
+
+
+class NotFoundError(DomainError):
+    """리소스를 찾을 수 없음"""
+
+
+class AlreadyBorrowedError(DomainError):
+    """이미 대출중인 도서"""
+
+
+class UnauthorizedError(DomainError):
+    """권한 없음"""

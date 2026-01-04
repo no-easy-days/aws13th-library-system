@@ -16,18 +16,24 @@ class ConsoleUI:
 
     def print_member_menu(self) -> None:
         print("\n=== 회원 도서 관리 ===")
-        print("1. 도서 검색")
-        print("2. 대출")
-        print("3. 내 대출 확인")
-        print("4. 반납")
-        print("5. 도서 등록 요청")
-        print("6. 로그아웃")
+        print("1. 도서 목록")
+        print("2. 도서 검색")
+        print("3. 도서 대출")
+        print("4. 내 대출 목록")
+        print("5. 도서 반납")
+        print("6. 도서 등록 요청")
+        print("7. 로그아웃")
 
     def print_admin_menu(self) -> None:
         print("\n=== 관리자 도서 관리 ===")
-        print("1. 등록 요청 승인(도서 등록)")
-        print("2. 현재 대출 목록")
-        print("3. 로그아웃")
+        print("1. 도서 등록")
+        print("2. 도서 목록")
+        print("3. 도서 검색")
+        print("4. 전체 대출 현황")
+        print("5. 도서 등록 요청 목록")
+        print("6. 요청 승인")
+        print("7. 요청 거절")
+        print("8. 로그아웃")
 
     def ask_int(self, prompt: str, *, min_value: int | None = None, max_value: int | None = None) -> int:
         while True:
