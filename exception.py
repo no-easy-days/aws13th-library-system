@@ -10,3 +10,7 @@ class DuplicateISBNError(LibraryError):
     def __init__(self, isbn: str):
         super().__init__(f"이미 등록된 도서 입니다: {isbn}")
 
+class DuplicateMemberError(LibraryError):
+    def __init__(self, name: str):
+        super().__init__(f"이미 등록된 회원 입니다: {name}")
+
