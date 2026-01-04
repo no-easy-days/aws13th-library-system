@@ -7,7 +7,7 @@ from src.exception import DataLoadError
 # 에러메세지 or 정상이면 None
 Validator = Callable[[str], Optional[str]]
 
-def prompt_input_valid(prompt:str, *, validator: Validator) -> str:
+def prompt_input_valid(prompt: str, *, validator: Validator) -> str:
     while True:
         value = input(prompt).strip()
         error = validator(value)
@@ -55,6 +55,7 @@ def load_books(library, filename: str) -> int:
             for title, author, isbn in reader:
                 library.add_book(Book(title, author, isbn))
                 count += 1
-        return count
     except FileNotFoundError as e:
         raise DataLoadError() from e
+    else:
+        return count
