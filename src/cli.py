@@ -5,6 +5,8 @@ from src.library import Library
 from src.utils import load_books
 from src.menu_actions import dispatch_menu_actions
 
+import os
+data_path = os.getenv("DATA_PATH", "./data/books.csv")
 
 def get_menu_choice() -> int:
     """
@@ -12,7 +14,7 @@ def get_menu_choice() -> int:
 
     :return: 사용자가 선택한 기능 번호
     """
-    print (
+    print(
         "\n=== 도서관 관리 시스템 ===\n"
         "1. 도서 등록\n"
         "2. 도서 목록\n"
@@ -40,7 +42,7 @@ def run():
 
     # 파일 읽어오기
     try:
-        count = load_books(library, "./data/books.csv")
+        count = load_books(library, data_path)
     except LibraryError as e:
         print(f"[ERROR] {e}")
         return

@@ -39,7 +39,7 @@ def phone11(phone: str) -> Optional[str]:
     return None
 
 
-def load_books(library, filename: str) -> int:
+def load_books(library, path: str) -> int:
     """
     프로그램 첫 실행 시 csv파일 읽어 library에 도서 등록
     :param library:
@@ -48,7 +48,7 @@ def load_books(library, filename: str) -> int:
     :raises DataLoadError: 파일 접근 실패 시
     """
     try:
-        with open(filename, newline='', encoding='utf-8') as f:
+        with open(path, newline='', encoding='utf-8') as f:
             reader = csv.reader(f)
             next(reader)
             count = 0
