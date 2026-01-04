@@ -141,7 +141,6 @@ def handle_borrow_book(library) -> None:
         except LibraryError as e: # 메뉴로 돌아감
             print(f"[ERROR] {e}")
             return
-        # TODO: isbn대신 책 이름 출력이 보기에는 좋을 듯
         print(f"\n[INFO] {name}님이 도서 {isbn}을 대출하였습니다.")
         return
 
@@ -177,7 +176,6 @@ def handle_return_book(library) -> None:
         except LibraryError as e:  # 메뉴로 돌아감
             print(f"[ERROR] {e}")
             return
-        # TODO: isbn대신 책 이름 출력이 보기에는 좋을 듯
         print(f"\n[INFO] {name}님이 도서 {isbn}을 반납하였습니다.")
         if overdue_days > 0:
             print(f"[WARNING] 연체 반납입니다. ({overdue_days}일 초과)")
