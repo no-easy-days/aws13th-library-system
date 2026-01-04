@@ -7,6 +7,7 @@ from src.exception import (
     BookBorrowedByOtherMemberError
 )
 from src.models import Book, Member
+from src.utils import prompt_input_valid, isbn13, phone11, non_empty
 
 
 def register_book(library) -> None:
@@ -20,18 +21,10 @@ def register_book(library) -> None:
 
     print("\n[도서 등록]"
           "\n도서 정보를 입력해주세요.")
-    # TODO: 공백 입력 처리 여유 있으면 하기
-
-    title = input("책 제목: ").strip()
-    author = input("저자: ").strip()
+    title = prompt_input_valid("책 제목: ", validator=non_empty)
+    author = prompt_input_valid("저자: ", validator=non_empty)
     while True:
-        isbn = input("isbn(13자리 숫자만 입력해주세요): ").strip()
-        if not isbn.isdigit():
-            print("[ERROR] ISBN은 숫자만 입력해주세요.")
-            continue
-        if len(isbn) != 13:
-            print("[ERROR] ISBN은 13자리 숫자 입니다.")
-            continue
+        isbn = prompt_input_valid("isbn(13자리 숫자만 입력해주세요): ", validator=isbn13)
         try:
             library.add_book(Book(title, author, isbn))
         except DuplicateISBNError as e:
@@ -56,10 +49,8 @@ def register_member(library) -> None:
           "\n회원 정보를 입력해주세요.")
     # 1. 이름: 공백 + 중복 처리
     while True:
-        name = input("이름: ").strip()
-        if not name:
-            print("[ERROR] 이름은 비어있을 수 없습니다.")
-            continue
+        name = prompt_input_valid("이름: ", validator=non_empty)
+
         if library.has_member(name):
             print("[ERROR] 이미 등록된 회원 이름입니다.")
             continue
@@ -67,18 +58,9 @@ def register_member(library) -> None:
 
     # 2. 핸드폰 번호: 숫자 11자리
     # 중복 처리는 따로 하지 않음
-    while True:
-        phone = input("핸드폰 번호 (숫자만 입력해주세요): ").strip()
-        if not phone.isdigit():
-            print("[ERROR] 숫자만 입력해주세요.")
-            continue
-        if len(phone) != 11:
-            print("[ERROR] 숫자 11자리를 입력해주세요.")
-            continue
-        library.add_member(Member(name, phone))
-        print("\n[INFO] 회원 정보를 등록하였습니다.")
-        return
-
+    phone = prompt_input_valid("핸드폰 번호 (숫자만 입력해주세요): ", validator=phone11)
+    library.add_member(Member(name, phone))
+    print("\n[INFO] 회원 정보를 등록하였습니다.")
 
 
 def handle_borrow_book(library) -> None:
@@ -97,24 +79,14 @@ def handle_borrow_book(library) -> None:
           "\n회원 정보와 대출 하실 도서를 입력해 주세요.")
     # 회원명 입력
     while True:
-        name = input("회원명: ").strip()
-        if not name:
-            print("[ERROR] 회원 이름을 입력해 주세요.")
-            continue
+        name = prompt_input_valid("회원명: ", validator=non_empty)
         if not library.has_member(name):
             print("[ERROR] 등록되지 않은 회원 입니다.")
             continue
         break
-    # TODO: 입력 처리 나중에 함수로 빼기
     # ISBN 입력
     while True:
-        isbn = input("도서 ISBN (13자리 숫자만 입력해주세요): ").strip()
-        if not isbn.isdigit():
-            print("[ERROR] ISBN은 숫자만 입력해주세요.")
-            continue
-        if len(isbn) != 13:
-            print("[ERROR] ISBN은 13자리 숫자 입니다.")
-            continue
+        isbn = prompt_input_valid("도서 ISBN (13자리 숫자만 입력해주세요): ", validator=isbn13)
         try:
             library.borrow_book(name, isbn)
         except (BookNotFoundError, BookAlreadyBorrowedError) as e:
@@ -143,24 +115,14 @@ def handle_return_book(library) -> None:
           "\n회원 정보와 반납 하실 도서를 입력해 주세요.")
     # 회원명 입력
     while True:
-        name = input("회원명: ").strip()
-        if not name:
-            print("[ERROR] 회원 이름을 입력해 주세요.")
-            continue
+        name = prompt_input_valid("회원명: ", validator=non_empty)
         if not library.has_member(name):
             print("[ERROR] 등록되지 않은 회원 입니다.")
             continue
         break
-    # TODO: 입력 처리 나중에 함수로 빼기
     # ISBN 입력
     while True:
-        isbn = input("도서 ISBN (13자리 숫자만 입력해주세요): ").strip()
-        if not isbn.isdigit():
-            print("[ERROR] ISBN은 숫자만 입력해주세요.")
-            continue
-        if len(isbn) != 13:
-            print("[ERROR] ISBN은 13자리 숫자 입니다.")
-            continue
+        isbn = prompt_input_valid("도서 ISBN (13자리 숫자만 입력해주세요): ", validator=isbn13)
         try:
             library.return_book(name, isbn)
         except (BookNotFoundError, BookNotBorrowedError, BookBorrowedByOtherMemberError) as e:
@@ -175,13 +137,7 @@ def handle_return_book(library) -> None:
 
 
 def handle_search_book(library) -> None:
-    while True:
-        keyword = input("검색어를 입력하세요: ").strip()
-        if not keyword:
-            print("[ERROR] 검색어를 입력해주세요.")
-            continue
-        break
-
+    keyword = prompt_input_valid("검색어를 입력하세요: ", validator=non_empty)
     result = library.search_book(keyword)
     if not result:
         print("\n[INFO] 검색 결과가 없습니다.")

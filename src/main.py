@@ -1,7 +1,6 @@
 from src.cli import run
 
 # TODO:
-#  - 파일 분리
 #  - 중복되는 예외처리 분리
 #  - 출력 서식 지정
 #  - 심화 과제
