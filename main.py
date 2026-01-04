@@ -9,39 +9,42 @@ init_data = csv_to_list("books.csv")
 for row in init_data[1:]:  # 첫 번째 행은 헤더이므로 제외
     book = Book(row[0], row[1], row[2])
     library.add_book(book)
-print("[System] books.csv 에서 도서 데이터를 불러왔습니다.")
+print("\n[System] books.csv 에서 도서 데이터를 불러왔습니다.")
 
 arr = ["도서 등록", "도서 목록", "회원 등록", "대출", "반납", "검색", "종료"]
 
 while True:
-    print("=== 도서관 관리 시스템 ===")
+    print("\n=== 도서관 관리 시스템 ===")
     for (i, item) in enumerate(arr, start=1):
         print(f"{i}. {item}")
-    choice = input("메뉴를 선택하세요: ")
+    choice = input("메뉴를 선택하세요: ").strip()
     if choice == "1":
         # 도서 등록 기능 구현
-        title = input("책 제목을 입력하세요: ")
+        title = input("\n책 제목을 입력하세요: ")
         author = input("책 저자를 입력하세요: ")
         isbn = input("책 ISBN을 입력하세요: ")
         new_book = Book(title, author, isbn)
         library.add_book(new_book)
-        print(f"'{new_book.title}' 책이 등록되었습니다.")
+        print("\n[완료] 도서 등록이 완료되었습니다.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "2":
         # 도서 목록 출력 기능 구현
-        print("현재 등록된 도서 목록:")
+        print("\n현재 등록된 도서 목록:")
         for book in library.books:
             print(book)
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "3":
         # 회원 등록 기능 구현
-        name = input("회원 이름을 입력하세요: ")
-        phone = input("회원 전화번호를 입력하세요: ")
+        name = input("\n회원 이름을 입력하세요: ").strip()
+        phone = input("회원 전화번호를 입력하세요: ").strip()
         new_member = Member(name, phone, [])
         library.add_member(new_member)
-        print(f"'{new_member.name}' 회원이 등록되었습니다.")
+        print("\n[완료] 회원 등록이 완료되었습니다.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "4":
         # 도서 대출 기능 구현
-        member_name = input("사용자 이름을 입력하세요: ")
-        isbn_to_borrow = input("대출할 책의 ISBN을 입력하세요: ")
+        member_name = input("\n사용자 이름을 입력하세요: ").strip()
+        isbn_to_borrow = input("대출할 책의 ISBN을 입력하세요: ").strip()
         # 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 가능산 상태 확인
         # 회원 존재 여부
         if member_name in library.members:
@@ -56,17 +59,18 @@ while True:
                 # 도서 대출 상태 확인
                 if not book_to_borrow.is_borrowed:
                     library.borrow_book(member, book_to_borrow)
-                    print(f">> '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
+                    print(f"\n>> '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
                 else:
                     print("해당 도서는 이미 대출 중입니다.")
             else:
                 print("해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
             print("해당 이름의 회원을 찾을 수 없습니다.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "5":
         # 도서 반납 기능 구현
-        member_name = input("사용자 이름을 입력하세요: ")
-        isbn_to_return = input("반납할 책의 ISBN을 입력하세요: ")
+        member_name = input("\n사용자 이름을 입력하세요: ").strip()
+        isbn_to_return = input("반납할 책의 ISBN을 입력하세요: ").strip()
         # 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 중인지 상태 확인
         if member_name in library.members:
             member = library.members[member_name]
@@ -80,20 +84,26 @@ while True:
                 # 도서 대출 상태 확인
                 if book_to_return.is_borrowed:
                     library.return_book(member, book_to_return)
-                    print(f">> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
+                    print(f"\n>> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
                 else:
                     print("해당 도서는 대출 중이 아닙니다.")
             else:
                 print("해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
             print("해당 이름의 회원을 찾을 수 없습니다.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "6":
         # 도서 검색 기능 구현
-        book_title_section = input("검색할 책 제목의 일부를 입력하세요: ")
-        print(f"'{book_title_section}'이(가) 포함된 도서 목록:")
+        book_title_section = input("\n검색할 책 제목의 일부를 입력하세요: ").strip()
+        print(f"\n'{book_title_section}'이(가) 포함된 도서 목록:")
+        found = False
         for book in library.books:
             if book_title_section in book.title:
                 print(book)
+                found = True
+        if not found:
+            print("검색 결과가 없습니다.")
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
     elif choice == "7":
         print("프로그램을 종료합니다.")
         break
