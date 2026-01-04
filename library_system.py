@@ -1,1 +1,0 @@
-## AWS Cloud School 13th Jaehyun Jimmy Kim
