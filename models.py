@@ -66,6 +66,8 @@ class Library:
         if target_book.is_borrowed:  # 이건 Ture이면 빌려졌다는거니깐
             print("대출이 어렵습니다.")
         else:
+            member = self.members[name]
+            member.borrowed_books.append(target_book)
             target_book.is_borrowed = True
             print("대출 처리 하였습니다.")
             print(f"{name}님이 {target_book.title} ({isbn})을 대출했습니다.")
@@ -75,14 +77,28 @@ class Library:
             if book.isbn == isbn:  # 그렇다가 내가 입력한 isbn에 맞는 isbn이있으면
                 target_book = book  # 이제 내가 찾은 책이여
                 break
+
         if target_book is None:
-            print("해당 ISBN책을 찾을 수 없습니다.") # 해당 ISBN에 맞는 책을 못찾으면
+            print("해당 ISBN의 책을 찾을 수 없습니다.") # 해당 ISBN에 맞는 책을 못찾으면
             return
-        if target_book.is_borrowed:  # 이건 Ture이면 빌려졌다는거니깐
+        # 멤버 존재 확인
+        if _name not in self.members:
+            print("해당 회원을 찾을 수 없습니다.")
+            return
+
+        member = self.members[_name]
+
+        # '이 회원이' 이 책을 빌렸는지 확인 후 반납
+        if target_book in member.borrowed_books:
+            member.borrowed_books.remove(target_book)
             target_book.is_borrowed = False
             print("반납 완료 했습니다.")
         else:
-            print("대출안하셨습니다.")
+            if target_book.is_borrowed:
+                print("다른 회원이 대출한 책입니다.")
+            else:
+                print("대출안하셨습니다.")
+
     def search_book(self,ch):
         # if '점프'을 입력 받았다고 생각
         for book in self.books:
