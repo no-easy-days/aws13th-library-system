@@ -19,6 +19,7 @@ class Book:
         self.loan_date = None
         self.due_date = None
 
+    # def loan_book(self):
     def to_dict(self):
         # CSV에 저장할 수 있도록 dict로 변환
         return {
