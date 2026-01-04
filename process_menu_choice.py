@@ -1,4 +1,9 @@
-from exception import DuplicateISBNError
+from exception import (
+    DuplicateISBNError,
+    LibraryError,
+    BookNotFoundError,
+    BookAlreadyBorrowedError,
+)
 from models import Book, Member
 
 
@@ -10,9 +15,11 @@ def register_book(library) -> None:
     :raise 이미 등록된 ISBN 등록 시 재입력 요청
     :return:
     """
+
     print("\n[도서 등록]"
           "\n도서 정보를 입력해주세요.")
     # TODO: 공백 입력 처리 여유 있으면 하기
+
     title = input("책 제목: ").strip()
     author = input("저자: ").strip()
     while True:
@@ -67,32 +74,69 @@ def register_member(library) -> None:
             print("[ERROR] 숫자 11자리를 입력해주세요.")
             continue
         library.add_member(Member(name, phone))
-        print("\n[INFO] 회원정보를 등록하였습니다.")
+        print("\n[INFO] 회원 정보를 등록 하였 습니다.")
         return
 
 
-#
-# # def borrow_book(library):
-# #     print("\n[도서 대출]"
-# #           "\n회원 정보와 대출하실 도서를 입력해주세요.")
-# #     # TODO: isbn 입력 에러 처리 코드 중복 어떻게 처리할지 고민
-# #     name = input("회원명: ")
-# #     book_isbn = input("도서 isbn: ")
-#
-#
+
+def handle_borrow_book(library) -> None:
+    """
+    도서 대출(UI 컨트롤러).
+
+    - 회원명 입력(공백/미등록 시 재입력)
+    - ISBN 입력(형식 오류/미등록/이미 대출중 시 재입력)
+    - 최종 대출 처리 로직은 Library.borrow_book()이 담당
+
+    :param library:
+    :return:
+    """
+
+    print("\n[도서 대출]"
+          "\n회원 정보와 대출 하실 도서를 입력해 주세요.")
+    # 회원명 입력
+    while True:
+        name = input("회원명: ").strip()
+        if not name:
+            print("[ERROR] 회원 이름을 입력해 주세요.")
+            continue
+        if not library.has_member(name):
+            print("[ERROR] 등록되지 않은 회원 입니다.")
+            continue
+        break
+    # TODO: 입력 처리 나중에 함수로 빼기
+    # ISBN 입력
+    while True:
+        isbn = input("도서 ISBN (13자리 숫자만 입력해주세요): ").strip()
+        if not isbn.isdigit():
+            print("[ERROR] ISBN은 숫자만 입력해주세요.")
+            continue
+        if len(isbn) != 13:
+            print("[ERROR] ISBN은 13자리 숫자 입니다.")
+            continue
+        try:
+            library.borrow_book(name, isbn)
+        except (BookNotFoundError, BookAlreadyBorrowedError) as e:
+            print(f"[ERROR] {e}")
+            continue
+        except LibraryError as e: # 메뉴로 돌아감
+            print(f"[ERROR] {e}")
+            return
+        # TODO: isbn대신 책 이름 출력이 보기에는 좋을 듯
+        print(f"[INFO] {name}님이 도서 {isbn}을 대출하였습니다.")
+        return
+
+
+
 def process_menu_choice(library, choice: int) -> None:
     if choice == 1:
         register_book(library)
     elif choice == 2:
         # TODO: 여유 있으면 출력 서식 지정
         library.book_list()
-        pass
     elif choice == 3:
         register_member(library)
-        pass
     elif choice == 4:
-        # borrow_book(library)
-        pass
+        handle_borrow_book(library)
     elif choice == 5:
         pass
     elif choice == 6:

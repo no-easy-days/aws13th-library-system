@@ -1,4 +1,8 @@
-from exception import DuplicateISBNError, DuplicateMemberError
+from exception import (
+    DuplicateISBNError,
+    DuplicateMemberError,
+    MemberNotFoundError, BookNotFoundError, BookAlreadyBorrowedError,
+)
 
 
 class Library:
@@ -18,7 +22,7 @@ class Library:
 
     def has_member(self, name: str) -> bool:
         """
-        기존에 등록된 member에 중복되는 이름인지 검사
+        member에 이미 등록된 멤버인지 검사
         :param name:
         :return: 이미 있는 이름 -> True
                 처음 등록되는 이름 -> False
@@ -32,14 +36,13 @@ class Library:
         for book in self.books.values():
             print(book)
 
+    def borrow_book(self, name: str, isbn: str) -> None:
+        if name not in self.members:
+            raise MemberNotFoundError(name)
+        if isbn not in self.books:
+            raise BookNotFoundError(isbn)
 
-    # # TODO: 여기부터, 기능 4 완성하면 3이랑 같이 커밋
-    # def borrow_book(self, phone, isbn):
-    #     for book in self.books:
-    #         if book.isbn == isbn and not book.is_borrowed:
-    #             for member in self.members:
-    #                 if member.phone == phone:
-    #                     member.
-
-
-
+        book = self.books[isbn]
+        if book.is_borrowed:
+            raise BookAlreadyBorrowedError(isbn)
+        book.is_borrowed = True
