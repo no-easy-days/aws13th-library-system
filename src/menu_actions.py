@@ -9,6 +9,11 @@ from src.exception import (
 from src.models import Book, Member
 from src.utils import prompt_input_valid, isbn13, phone11, non_empty
 
+TITLE_WIDTH = 32
+AUTHOR_WIDTH = 22
+ISBN_WIDTH = 13
+STATUS_WIDTH = 10
+
 
 def register_book(library) -> None:
     """
@@ -19,8 +24,10 @@ def register_book(library) -> None:
     :return:
     """
 
-    print("\n[도서 등록]"
-          "\n도서 정보를 입력해주세요.")
+    print(
+        "\n[도서 등록]"
+        "\n도서 정보를 입력해주세요."
+    )
     title = prompt_input_valid("책 제목: ", validator=non_empty)
     author = prompt_input_valid("저자: ", validator=non_empty)
     while True:
@@ -41,10 +48,6 @@ def print_book_table(books: list, header: str) -> None:
     :param header: 출력 헤더 (ex. "[도서 목록]", "[검색 결과]")
     :return:
     """
-    TITLE_WIDTH = 32
-    AUTHOR_WIDTH = 22
-    ISBN_WIDTH = 13
-    STATUS_WIDTH = 10
 
     def format_text(text: str, width: int) -> str:
         if len(text) > width:
@@ -90,8 +93,10 @@ def register_member(library) -> None:
     :param library:
     :return:
     """
-    print("\n[회원 등록]"
-          "\n회원 정보를 입력해주세요.")
+    print(
+        "\n[회원 등록]"
+        "\n회원 정보를 입력해주세요."
+    )
     # 1. 이름: 공백 + 중복 처리
     while True:
         name = prompt_input_valid("이름: ", validator=non_empty)
@@ -120,8 +125,10 @@ def handle_borrow_book(library) -> None:
     :return:
     """
 
-    print("\n[도서 대출]"
-          "\n회원 정보와 대출 하실 도서를 입력해 주세요.")
+    print(
+        "\n[도서 대출]"
+        "\n회원 정보와 대출 하실 도서를 입력해 주세요."
+    )
     # 회원명 입력
     while True:
         name = prompt_input_valid("회원명: ", validator=non_empty)
@@ -137,7 +144,7 @@ def handle_borrow_book(library) -> None:
         except (BookNotFoundError, BookAlreadyBorrowedError) as e:
             print(f"[ERROR] {e}")
             continue
-        except LibraryError as e: # 메뉴로 돌아감
+        except LibraryError as e: # 예상치 못한 error 방어
             print(f"[ERROR] {e}")
             return
         print(f"\n[INFO] {name}님이 도서 {isbn}을 대출하였습니다.")
@@ -155,8 +162,10 @@ def handle_return_book(library) -> None:
     :param library:
     :return:
     """
-    print("\n[도서 반납]"
-          "\n회원 정보와 반납 하실 도서를 입력해 주세요.")
+    print(
+        "\n[도서 반납]"
+        "\n회원 정보와 반납 하실 도서를 입력해 주세요."
+    )
     # 회원명 입력
     while True:
         name = prompt_input_valid("회원명: ", validator=non_empty)
@@ -203,3 +212,5 @@ def dispatch_menu_actions(library, choice: int) -> None:
         handle_return_book(library)
     elif choice == 6:
         handle_search_book(library)
+    else:
+        print(f"[ERROR] 유효하지 않은 메뉴 선택입니다.")
