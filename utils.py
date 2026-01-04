@@ -7,7 +7,7 @@ def load_books_from_csv(filename):
     try:
         with open(filename, 'r', encoding='utf-8') as file: # 인코딩 지정, 
             csv_reader = csv.reader(file) # CSV 파일을 읽는 리더 객체 생성
-            next(csv_reader)  # 다음 줄 읽기 - 첫 줄(헤더) 건너뛰기
+            next(csv_reader, None)  # 다음 줄 읽기 - 첫 줄(헤더) 건너뛰기
             
             for row in csv_reader:
                 if len(row) >= 3:  # 데이터가 3개 이상인 경우만 처리
@@ -33,7 +33,8 @@ def get_valid_input(prompt, input_type=str):
     while True:
         try: # 사용자 입력 받기
             user_input = input(prompt)
-            if input_type == int: # 숫자 변환이 필요할 경우 변환해서 반환
+            if input_type is int: # 숫자 변환이 필요할 경우 변환해서 반환
+                # 타입 비교 시 is 사용
                 return int(user_input)
             return user_input # 문자열 그대로 반환
         except ValueError: # 숫자로 변환 실패시 에러 메시지

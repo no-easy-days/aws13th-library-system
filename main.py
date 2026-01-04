@@ -20,8 +20,17 @@ def register_book(library):
     # 도서 등록 기능
     print("\n[도서 등록]")
     title = input("책 제목을 입력하세요: ")
+    if not title.strip():
+        print("[오류] 책 제목은 필수 입력값입니다.")
+        return
     author = input("저자를 입력하세요: ")
+    if not author.strip():
+        print("[오류] 저자는 필수 입력값입니다.")
+        return
     isbn = input("ISBN을 입력하세요: ")
+    if not isbn.strip():
+        print("[오류] ISBN은 필수 입력값입니다.")
+        return
     
     book = Book(title, author, isbn)
     library.add_book(book)

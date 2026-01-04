@@ -25,6 +25,23 @@ class Member:
         book_count = len(self.borrowed_books) # 해당 회원이 대출한 책의 권수 계산
         return f"{self.name} ({self.phone}) - 대출중인 책: {book_count}권"
 
+# 사용자 정의 예외 클래스
+# Exception 클래스 상속받음 
+class BookNotFoundError(Exception):
+    # 책을 찾을 수 없을 때
+    pass
+
+class MemberNotFoundError(Exception):
+    # 회원을 찾을 수 없을 때
+    pass
+
+class BookAlreadyBorrowedError(Exception):
+    # 이미 대출중인 책을 대출하려 할 때
+    pass
+
+class BookNotBorrowedError(Exception):
+    # 대출중이 아닌 책을 반납하려 할 때
+    pass
 
 class Library:
     # 도서관 전체 시스템을 관리하는 클래스
@@ -115,21 +132,3 @@ class Library:
             print(f"{i}. {book}")
         print()
 
-
-# 사용자 정의 예외 클래스
-# Exception 클래스 상속받음 
-class BookNotFoundError(Exception):
-    # 책을 찾을 수 없을 때
-    pass
-
-class MemberNotFoundError(Exception):
-    # 회원을 찾을 수 없을 때
-    pass
-
-class BookAlreadyBorrowedError(Exception):
-    # 이미 대출중인 책을 대출하려 할 때
-    pass
-
-class BookNotBorrowedError(Exception):
-    # 대출중이 아닌 책을 반납하려 할 때
-    pass
