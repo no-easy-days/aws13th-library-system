@@ -1,142 +1,101 @@
-import csv
-
-# csv 파일을 리스트로 변환하는 함수
-def csv_to_list(filename):
-    with open(filename, "r", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        return list(reader)
-
-# 임시 클래스 정의 추후 수정 필요
-class Book:
-    def __init__(self, title, author, isbn,is_borrowed=False):
-        self.title = title
-        self.author = author
-        self.isbn = isbn
-        self.is_borrowed = is_borrowed
-        
-    def __str__(self):
-        if self.is_borrowed:
-            return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출중"
-        else:
-            return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출 가능"
-     
-class Member:
-    def __init__(self, name,phone,borrowed_books):
-        self.name = name
-        self.phone = phone
-        self.borrowed_books = []
-        
-class Library:
-    def __init__(self):
-        self.books = []
-        self.members = {}
-        
-    def add_book(self, book):
-        self.books.append(book)
-        
-    def add_member(self, member):
-        self.members.append(member)
-        
-    def borrow_book(self, member, book):
-        if book in self.books and not book.is_borrowed:
-            book.is_borrowed = True
-            member.borrowed_books.append(book)
-            return True
-        return False
-    
-    def return_book(self, member, book):
-        if book in member.borrowed_books:
-            book.is_borrowed = False
-            member.borrowed_books.remove(book)
-            return True
-        return False
-    
-    
-    
+from models import Book, Member, Library
+from utils import csv_to_list
     
 # Library 인스턴스 생성 및 예제 사용
 library = Library()
 # csv 파일에서 책 데이터 불러오기
 init_data = csv_to_list("books.csv")
-for row in init_data:
+
+for row in init_data[1:]:  # 첫 번째 행은 헤더이므로 제외
     book = Book(row[0], row[1], row[2])
     library.add_book(book)
+print("[System] books.csv 에서 도서 데이터를 불러왔습니다.")
 
-# 구현해야할 기능 : 도서 등록: 제목, 저자, ISBN 입력 받아 저장
-title = input("책 제목을 입력하세요: ")
-author = input("책 저자를 입력하세요: ")
-isbn = input("책 ISBN을 입력하세요: ")
-new_book = Book(title, author, isbn)
-library.add_book(new_book)
-print(f"'{new_book.title}' 책이 등록되었습니다.")
+arr = ["도서 등록", "도서 목록", "회원 등록", "대출", "반납", "검색", "종료"]
 
-# 구현해야할 기능 : 현재 등록된 도서 목록 출력
-print("현재 등록된 도서 목록:")
-for book in library.books:
-    print(book)
-
-# 구현해야할 기능 : 회원 등록: 이름, 전화번호 입력 받아 저장
-name = input("회원 이름을 입력하세요: ")
-phone = input("회원 전화번호를 입력하세요: ")
-new_member = Member(name, phone, [])
-library.add_member(new_member)
-
-# 구현해야할 기능 : 도서 대출 : 회원 이름과 isbn 입력 받아 해당 회원 존재하고, 도서가 대출 가능하면 대출 처리
-member_name = input("사용자 이름을 입력하세요: ")
-isbn_to_borrow = input("대출할 책의 ISBN을 입력하세요: ")
-# 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 가능산 상태 확인
-# 회원 존재 여부
-if member_name in library.members:
-    member = library.members[member_name]
-    # 도서 존재 여부
-    book_to_borrow = None
-    for book in library.books:
-        if book.isbn == isbn_to_borrow:
-            book_to_borrow = book
-            break
-    if book_to_borrow:
-        # 도서 대출 상태 확인
-        if not book_to_borrow.is_borrowed:
-            library.borrow_book(member, book_to_borrow)
-            print(f">> '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
+while True:
+    print("=== 도서관 관리 시스템 ===")
+    for (i, item) in enumerate(arr, start=1):
+        print(f"{i}. {item}")
+    choice = input("메뉴를 선택하세요: ")
+    if choice == "1":
+        # 도서 등록 기능 구현
+        title = input("책 제목을 입력하세요: ")
+        author = input("책 저자를 입력하세요: ")
+        isbn = input("책 ISBN을 입력하세요: ")
+        new_book = Book(title, author, isbn)
+        library.add_book(new_book)
+        print(f"'{new_book.title}' 책이 등록되었습니다.")
+    elif choice == "2":
+        # 도서 목록 출력 기능 구현
+        print("현재 등록된 도서 목록:")
+        for book in library.books:
+            print(book)
+    elif choice == "3":
+        # 회원 등록 기능 구현
+        name = input("회원 이름을 입력하세요: ")
+        phone = input("회원 전화번호를 입력하세요: ")
+        new_member = Member(name, phone, [])
+        library.add_member(new_member)
+        print(f"'{new_member.name}' 회원이 등록되었습니다.")
+    elif choice == "4":
+        # 도서 대출 기능 구현
+        member_name = input("사용자 이름을 입력하세요: ")
+        isbn_to_borrow = input("대출할 책의 ISBN을 입력하세요: ")
+        # 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 가능산 상태 확인
+        # 회원 존재 여부
+        if member_name in library.members:
+            member = library.members[member_name]
+            # 도서 존재 여부
+            book_to_borrow = None
+            for book in library.books:
+                if book.isbn == isbn_to_borrow:
+                    book_to_borrow = book
+                    break
+            if book_to_borrow:
+                # 도서 대출 상태 확인
+                if not book_to_borrow.is_borrowed:
+                    library.borrow_book(member, book_to_borrow)
+                    print(f">> '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
+                else:
+                    print("해당 도서는 이미 대출 중입니다.")
+            else:
+                print("해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
-            print("해당 도서는 이미 대출 중입니다.")
-    else:
-        print("해당 ISBN의 도서를 찾을 수 없습니다.")
-else:
-    print("해당 이름의 회원을 찾을 수 없습니다.")
-    
-# 구현해야할 기능 : 도서 반납 : 회원 이름과 isbn 입력 받아 해당 회원 존재하고, 도서가 대출 중이면 반납 처리
-member_name = input("사용자 이름을 입력하세요: ")
-isbn_to_return = input("반납할 책의 ISBN을 입력하세요: ")
-# 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 중인지 상태 확인
-if member_name in library.members:
-    member = library.members[member_name]
-    # 도서 존재 여부
-    book_to_return = None
-    for book in library.books:
-        if book.isbn == isbn_to_return:
-            book_to_return = book
-            break
-    if book_to_return:
-        # 도서 대출 상태 확인
-        if book_to_return.is_borrowed:
-            library.return_book(member, book_to_return)
-            print(f">> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
+            print("해당 이름의 회원을 찾을 수 없습니다.")
+    elif choice == "5":
+        # 도서 반납 기능 구현
+        member_name = input("사용자 이름을 입력하세요: ")
+        isbn_to_return = input("반납할 책의 ISBN을 입력하세요: ")
+        # 우선 회원 존재 여부 확인 및 도서 존재 여부 확인 및 대출 중인지 상태 확인
+        if member_name in library.members:
+            member = library.members[member_name]
+            # 도서 존재 여부
+            book_to_return = None
+            for book in library.books:
+                if book.isbn == isbn_to_return:
+                    book_to_return = book
+                    break
+            if book_to_return:
+                # 도서 대출 상태 확인
+                if book_to_return.is_borrowed:
+                    library.return_book(member, book_to_return)
+                    print(f">> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
+                else:
+                    print("해당 도서는 대출 중이 아닙니다.")
+            else:
+                print("해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
-            print("해당 도서는 대출 중이 아닙니다.")
+            print("해당 이름의 회원을 찾을 수 없습니다.")
+    elif choice == "6":
+        # 도서 검색 기능 구현
+        book_title_section = input("검색할 책 제목의 일부를 입력하세요: ")
+        print(f"'{book_title_section}'이(가) 포함된 도서 목록:")
+        for book in library.books:
+            if book_title_section in book.title:
+                print(book)
+    elif choice == "7":
+        print("프로그램을 종료합니다.")
+        break
     else:
-        print("해당 ISBN의 도서를 찾을 수 없습니다.")
-else:
-    print("해당 이름의 회원을 찾을 수 없습니다.")
-    
-# 구현해야할 기능 : 도서 검색 : 책 제목의 일부를 입력하면 해당 문자열이 포함된 도서 목록 출력
-book_title_section = input("검색할 책 제목의 일부를 입력하세요: ")
-print(f"'{book_title_section}'이(가) 포함된 도서 목록:")
-for book in library.books:
-    if book_title_section in book.title:
-        print(book)
-    
-# 구현해야할 기능 : 종료 : 프로그램 종료
-print("프로그램을 종료합니다.")
-exit()
+        print("잘못된 선택입니다. 다시 시도하세요.")
