@@ -1,7 +1,11 @@
 from exception import (
     DuplicateISBNError,
     DuplicateMemberError,
-    MemberNotFoundError, BookNotFoundError, BookAlreadyBorrowedError,
+    MemberNotFoundError,
+    BookNotFoundError,
+    BookAlreadyBorrowedError,
+    BookNotBorrowedError,
+    BookBorrowedByOtherMemberError,
 )
 
 
@@ -46,3 +50,18 @@ class Library:
         if book.is_borrowed:
             raise BookAlreadyBorrowedError(isbn)
         book.is_borrowed = True
+        book.borrowed_by = name
+
+    def return_book(self, name: str, isbn: str) -> None:
+        if name not in self.members:
+            raise MemberNotFoundError(name)
+        if isbn not in self.books:
+            raise BookNotFoundError(isbn)
+
+        book = self.books[isbn]
+        if not book.is_borrowed:
+            raise BookNotBorrowedError(isbn)
+        if book.borrowed_by != name:
+            raise BookBorrowedByOtherMemberError(isbn)
+        book.is_borrowed = False
+        book.borrowed_by = None

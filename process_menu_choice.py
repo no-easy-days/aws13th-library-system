@@ -3,6 +3,8 @@ from exception import (
     LibraryError,
     BookNotFoundError,
     BookAlreadyBorrowedError,
+    BookNotBorrowedError,
+    BookBorrowedByOtherMemberError
 )
 from models import Book, Member
 
@@ -74,7 +76,7 @@ def register_member(library) -> None:
             print("[ERROR] 숫자 11자리를 입력해주세요.")
             continue
         library.add_member(Member(name, phone))
-        print("\n[INFO] 회원 정보를 등록 하였 습니다.")
+        print("\n[INFO] 회원 정보를 등록하였습니다.")
         return
 
 
@@ -122,7 +124,53 @@ def handle_borrow_book(library) -> None:
             print(f"[ERROR] {e}")
             return
         # TODO: isbn대신 책 이름 출력이 보기에는 좋을 듯
-        print(f"[INFO] {name}님이 도서 {isbn}을 대출하였습니다.")
+        print(f"\n[INFO] {name}님이 도서 {isbn}을 대출하였습니다.")
+        return
+
+
+def handle_return_book(library) -> None:
+    """
+    도서 반납(UI 컨트롤러)
+
+    - 회원명 입력(공백/미등록 시 재입력)
+    - ISBN 입력(형식 오류/미등록/대출 상태 아님/다른 회원 대출 중이면 재입력)
+    - 최종 반납 처리 로직은 Library.return_book()이 담당
+
+    :param library:
+    :return:
+    """
+    print("\n[도서 반납]"
+          "\n회원 정보와 반납 하실 도서를 입력해 주세요.")
+    # 회원명 입력
+    while True:
+        name = input("회원명: ").strip()
+        if not name:
+            print("[ERROR] 회원 이름을 입력해 주세요.")
+            continue
+        if not library.has_member(name):
+            print("[ERROR] 등록되지 않은 회원 입니다.")
+            continue
+        break
+    # TODO: 입력 처리 나중에 함수로 빼기
+    # ISBN 입력
+    while True:
+        isbn = input("도서 ISBN (13자리 숫자만 입력해주세요): ").strip()
+        if not isbn.isdigit():
+            print("[ERROR] ISBN은 숫자만 입력해주세요.")
+            continue
+        if len(isbn) != 13:
+            print("[ERROR] ISBN은 13자리 숫자 입니다.")
+            continue
+        try:
+            library.return_book(name, isbn)
+        except (BookNotFoundError, BookNotBorrowedError, BookBorrowedByOtherMemberError) as e:
+            print(f"[ERROR] {e}")
+            continue
+        except LibraryError as e:  # 메뉴로 돌아감
+            print(f"[ERROR] {e}")
+            return
+        # TODO: isbn대신 책 이름 출력이 보기에는 좋을 듯
+        print(f"\n[INFO] {name}님이 도서 {isbn}을 반납하였습니다.")
         return
 
 
@@ -138,6 +186,6 @@ def process_menu_choice(library, choice: int) -> None:
     elif choice == 4:
         handle_borrow_book(library)
     elif choice == 5:
-        pass
+        handle_return_book(library)
     elif choice == 6:
         pass

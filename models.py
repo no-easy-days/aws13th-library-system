@@ -1,10 +1,12 @@
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass(slots=True)
 class Book:
     title: str
     author: str
     isbn: str
+    borrowed_by: Optional[str] = None
     is_borrowed: bool = False
 
     def __str__(self) -> str:

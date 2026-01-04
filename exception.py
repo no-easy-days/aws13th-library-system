@@ -20,6 +20,14 @@ class BookAlreadyBorrowedError(LibraryError):
     def __init__(self, isbn: str):
         super().__init__(f"이미 대출 중인 도서입니다: {isbn}")
 
+class BookNotBorrowedError(LibraryError):
+    def __init__(self, isbn: str):
+        super().__init__(f"대출 중인 도서가 아닙니다: {isbn}")
+
+class BookBorrowedByOtherMemberError(LibraryError):
+    def __init__(self, isbn: str):
+        super().__init__(f"해당 도서는 다른 회원이 대출 중입니다.")
+
 # ==== 회원 관련 ====
 class DuplicateMemberError(LibraryError):
     def __init__(self, name: str):
