@@ -40,7 +40,7 @@ def run():
 
     # 파일 읽어오기
     try:
-        count = load_books(library, "../data/books.csv")
+        count = load_books(library, "./data/books.csv")
     except LibraryError as e:
         print(f"[ERROR] {e}")
         return
