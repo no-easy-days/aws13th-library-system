@@ -170,7 +170,7 @@ def handle_return_book(library) -> None:
     while True:
         isbn = prompt_input_valid("도서 ISBN (13자리 숫자만 입력해주세요): ", validator=isbn13)
         try:
-            library.return_book(name, isbn)
+            overdue_days = library.return_book(name, isbn)
         except (BookNotFoundError, BookNotBorrowedError, BookBorrowedByOtherMemberError) as e:
             print(f"[ERROR] {e}")
             continue
@@ -179,6 +179,8 @@ def handle_return_book(library) -> None:
             return
         # TODO: isbn대신 책 이름 출력이 보기에는 좋을 듯
         print(f"\n[INFO] {name}님이 도서 {isbn}을 반납하였습니다.")
+        if overdue_days > 0:
+            print(f"[WARNING] 연체 반납입니다. ({overdue_days}일 초과)")
         return
 
 
