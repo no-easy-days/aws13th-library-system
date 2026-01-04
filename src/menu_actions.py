@@ -74,7 +74,7 @@ def print_book_table(books: list, header: str) -> None:
 
 def book_list(books: list) -> None:
     if not books:
-        print("[ERROR] 등록된 도서가 없습니다.")
+        print("[INFO] 등록된 도서가 없습니다.")
         return
     print_book_table(books, "[도서 목록]")
 
