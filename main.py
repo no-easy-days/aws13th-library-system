@@ -72,6 +72,7 @@ while True:
             print("\n[ERROR] 이미 등록된 회원입니다.")
             input("\n엔터를 누르면 메뉴로 돌아갑니다...")
             continue
+
         # TODO:
         """현재 회원 식별자는 name 기준으로 구현됨.
         동명이인 문제를 고려하면 phone을 PK로 사용하는 구조가 더 적절함.
@@ -98,11 +99,13 @@ while True:
                     break
             if book_to_borrow:
                 # 도서 대출 상태 확인
-                if not book_to_borrow.is_borrowed:
+                if book_to_borrow.is_borrowed:
+                    print("\n[ERROR] 해당 도서는 이미 대출 중입니다.")
+                elif book_to_borrow in member.borrowed_books:
+                    print("\n[ERROR] 이미 이 책을 대출한 상태입니다.")
+                else:
                     library.borrow_book(member, book_to_borrow)
                     print(f"\n>> '{member_name}'님이 '{book_to_borrow.title}' ({isbn_to_borrow})을 대출했습니다.")
-                else:
-                    print("해당 도서는 이미 대출 중입니다.")
             else:
                 print("해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
@@ -123,11 +126,13 @@ while True:
                     break
             if book_to_return:
                 # 도서 대출 상태 확인
-                if book_to_return.is_borrowed:
+                if not book_to_return.is_borrowed:
+                    print("\n[ERROR] 해당 도서는 대출 중이 아닙니다.")
+                elif book_to_return not in member.borrowed_books:
+                    print("\n[ERROR] 이 회원이 대출한 책이 아닙니다.")
+                else:
                     library.return_book(member, book_to_return)
                     print(f"\n>> '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
-                else:
-                    print("해당 도서는 대출 중이 아닙니다.")
             else:
                 print("해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
