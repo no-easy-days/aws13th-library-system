@@ -42,6 +42,9 @@ class BookAlreadyBorrowedError(Exception):
 class BookNotBorrowedError(Exception):
     # 대출중이 아닌 책을 반납하려 할 때
     pass
+class MemberAlreadyExistsError(Exception):
+    # 이미 존재하는 회원을 추가하려 할 때
+    pass
 
 class Library:
     # 도서관 전체 시스템을 관리하는 클래스
@@ -55,6 +58,8 @@ class Library:
     
     def add_member(self, member):
         # 회원을 도서관에 추가
+        if member.name in self.members: # 중복 회원명 처리 
+            raise MemberAlreadyExistsError(f"'{member.name}' 회원이 이미 존재합니다.")
         self.members[member.name] = member # (키 - 이름, 값 - Member 객체)
     
     def find_book_by_isbn(self, isbn):
