@@ -1,5 +1,5 @@
 from models import Book, Member, Library
-from utils import csv_to_list, input_non_empty
+from utils import csv_to_list, input_non_empty, validate_phone, validate_name
     
 # Library 인스턴스 생성 및 예제 사용
 library = Library()
@@ -59,6 +59,24 @@ while True:
         # 회원 등록 기능 구현
         name = input_non_empty("\n회원 이름을 입력하세요: ", "회원 이름은 필수 입력값입니다.")
         phone = input_non_empty("회원 전화번호를 입력하세요: ", "회원 전화번호는 필수 입력값입니다.")
+        
+        try:
+            validate_name(name)
+            validate_phone(phone)
+        except ValueError as e:
+            print(f"\n[ERROR] {e}")
+            input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+            continue
+        
+        if name in library.members:
+            print("\n[ERROR] 이미 등록된 회원입니다.")
+            input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+            continue
+        # TODO:
+        """현재 회원 식별자는 name 기준으로 구현됨.
+        동명이인 문제를 고려하면 phone을 PK로 사용하는 구조가 더 적절함.
+        추후 구조 리팩토링 시 members dict의 key를 phone으로 변경 예정. """
+        
         new_member = Member(name, phone, [])
         library.add_member(new_member)
         print("\n[완료] 회원 등록이 완료되었습니다.")

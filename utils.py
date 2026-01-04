@@ -1,4 +1,5 @@
 import csv
+import re
 
 # csv 파일을 리스트로 변환하는 함수
 def csv_to_list(filename):
@@ -21,3 +22,12 @@ def input_non_empty(prompt, error_message):
             return value
         else:
             print(f"\n[ERROR] {error_message}")
+            
+def validate_phone(phone):
+    pattern = r"^010(-?\d{4}){2}$"
+    if not re.match(pattern, phone):
+        raise ValueError("전화번호 형식이 올바르지 않습니다. 예: 01012345678 또는 010-1234-5678")
+    
+def validate_name(name):
+    if not name.replace(" ", "").isalpha():
+        raise ValueError("이름은 한글 또는 영문자만 포함해야 합니다.")
