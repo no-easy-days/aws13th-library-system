@@ -13,7 +13,7 @@ class Book:
             return f"{self.title} by {self.author} (ISBN: {self.isbn}) - 대출 가능"
      
 class Member:
-    def __init__(self, name,phone,borrowed_books):
+    def __init__(self, name, phone):
         self.name = name
         self.phone = phone
         self.borrowed_books = []

@@ -90,7 +90,7 @@ while True:
         동명이인 문제를 고려하면 phone을 PK로 사용하는 구조가 더 적절함.
         추후 구조 리팩토링 시 members dict의 key를 phone으로 변경 예정. """
         
-        new_member = Member(name, phone, [])
+        new_member = Member(name, phone)
         library.add_member(new_member)
         print("\n[SUCCESS] 회원 등록이 완료되었습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
@@ -146,7 +146,7 @@ while True:
                     library.return_book(member, book_to_return)
                     print(f"\n[SUCCESS] '{member_name}'님이 '{book_to_return.title}' ({isbn_to_return})을 반납했습니다.")
             else:
-                print("\n[ERROR]해당 ISBN의 도서를 찾을 수 없습니다.")
+                print("\n[ERROR] 해당 ISBN의 도서를 찾을 수 없습니다.")
         else:
             print("\n[ERROR] 해당 이름의 회원을 찾을 수 없습니다.")
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
