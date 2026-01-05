@@ -1,0 +1,24 @@
+from dataclasses import dataclass
+from typing import Optional
+from datetime import datetime
+
+@dataclass(slots=True)
+class Book:
+    title: str
+    author: str
+    isbn: str
+    borrowed_by: Optional[str] = None
+    is_borrowed: bool = False
+    borrowed_at: Optional[datetime] = None
+
+    def __str__(self) -> str:
+        status = "대출중" if self.is_borrowed else "대출가능"
+        return f"{self.title} {self.author} {self.isbn} {status}"
+    @property
+    def status(self) -> str:
+        return "대출중" if self.is_borrowed else "대출가능"
+
+@dataclass(slots=True)
+class Member:
+    name: str
+    phone: str
