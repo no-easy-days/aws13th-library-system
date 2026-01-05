@@ -6,7 +6,7 @@ from src.utils import load_books
 from src.menu_actions import dispatch_menu_actions
 
 import os
-data_path = os.getenv("DATA_PATH", "./data/books.csv")
+data_path = os.getenv("DATA_PATH", "../data/books.csv")
 
 def get_menu_choice() -> int:
     """

@@ -15,6 +15,14 @@ ISBN_WIDTH = 13
 STATUS_WIDTH = 10
 
 
+def _validate_and_get_name(library) -> str:
+    while True:
+        name = prompt_input_valid("회원명: ", validator=non_empty)
+        if not library.has_member(name):
+            print("[ERROR] 등록 되지 않은 회원 입니다.")
+            continue
+        return name
+
 def register_book(library) -> None:
     """
     도서 정보를 입력받아 도서 등록한다.
@@ -130,12 +138,7 @@ def handle_borrow_book(library) -> None:
         "\n회원 정보와 대출 하실 도서를 입력해 주세요."
     )
     # 회원명 입력
-    while True:
-        name = prompt_input_valid("회원명: ", validator=non_empty)
-        if not library.has_member(name):
-            print("[ERROR] 등록되지 않은 회원 입니다.")
-            continue
-        break
+    name = _validate_and_get_name(library)
     # ISBN 입력
     while True:
         isbn = prompt_input_valid("도서 ISBN (13자리 숫자만 입력해주세요): ", validator=isbn13)
@@ -144,7 +147,7 @@ def handle_borrow_book(library) -> None:
         except (BookNotFoundError, BookAlreadyBorrowedError) as e:
             print(f"[ERROR] {e}")
             continue
-        except LibraryError as e: # 예상치 못한 error 방어
+        except LibraryError as e:  # 예상치 못한 error 방어
             print(f"[ERROR] {e}")
             return
         print(f"\n[INFO] {name}님이 도서 {isbn}을 대출하였습니다.")
@@ -167,12 +170,7 @@ def handle_return_book(library) -> None:
         "\n회원 정보와 반납 하실 도서를 입력해 주세요."
     )
     # 회원명 입력
-    while True:
-        name = prompt_input_valid("회원명: ", validator=non_empty)
-        if not library.has_member(name):
-            print("[ERROR] 등록되지 않은 회원 입니다.")
-            continue
-        break
+    name = _validate_and_get_name(library)
     # ISBN 입력
     while True:
         isbn = prompt_input_valid("도서 ISBN (13자리 숫자만 입력해주세요): ", validator=isbn13)
@@ -181,7 +179,7 @@ def handle_return_book(library) -> None:
         except (BookNotFoundError, BookNotBorrowedError, BookBorrowedByOtherMemberError) as e:
             print(f"[ERROR] {e}")
             continue
-        except LibraryError as e:  # 메뉴로 돌아감
+        except LibraryError as e:  # 예상치 못한 error 방어
             print(f"[ERROR] {e}")
             return
         print(f"\n[INFO] {name}님이 도서 {isbn}을 반납하였습니다.")
