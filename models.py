@@ -8,7 +8,9 @@ class Book:
     # 책 정보 문자열 반환
     def __str__(self):
         status = "[대출중]" if self.is_borrowed else "[대출가능]"
-        return f"{self.title}, {self.author}, {self.isbn}"
+        # 대출상태값 print시 볼 수 있도록 변경 -- 2026.01.05
+        # return f"{self.title} | {self.author} | {self.isbn}"
+        return f"{self.title} | {self.author} | {self.isbn} | {status} "
 
 class Member:
     def __init__(self, name, phone):
@@ -16,8 +18,13 @@ class Member:
         self.phone = phone
         self.borrowed_books = []
 
+    # 회원 정보 문자열 반환 -- 2026.01.05
+    def __str__(self):
+        return f"{self.name} | {self.phone}"
+
 class Library:
     def __init__(self):
+        # 1. books: Book 클래스 인스턴스들을 담는 리스트
         self.books = []
         self.members = []
 
@@ -36,11 +43,15 @@ class Library:
     # 멤버 등록 (이름, 폰번호 등록)
     def add_member(self, name, phone):
         #members 리스트에 이름, 폰번호에서 같은거 있는지 확인
-        for member in self.members:
-            if member.name in name:
+        for member_name in self.members:
+            # 부분 문자열이 아닌 정확한 일치로 변경 -- 2026.01.05
+            # if member_name.name in name:
+            if member_name.name == name:
                 print(f"해당 회원명은 이미 등록되어 있습니다. 등록할 수 없습니다.")
                 return None
-            elif member.phone in phone:
+            # 부분 문자열이 아닌 정확한 일치로 변경 -- 2026.01.05
+            # elif member_name.phone in phone:
+            elif member_name.phone == phone:
                 print(f"해당 휴대폰 번호는 이미 등록되어 있습니다. 등록할 수 없습니다.")
                 return None
         print(f"해당 이름, 휴대폰 번호는 등록되어 있지 않습니다. 회원 등록을 시작합니다. ")
@@ -114,6 +125,11 @@ class Library:
         for book in self.books:
             if book.isbn == str(isbn):
                 print(f"일치하는 isbn 번호를 찾았습니다. 책 이름 : {book.title}")
+                # 다른 회원이 대출한 책의 isbn 입력 / 데이터 불일치 검증 추가 --2026.01.05
+                if book not in target_member.borrowed_books:
+                    print(f"{name} 님이 대출하신 책이 아닙니다. 다시 시도하세요. ")
+                    return None
+                # 코드 추가 끝 ---
                 book.is_borrowed = False
                 target_member.borrowed_books.remove(book)
                 print(f"반납 처리가 완료되었습니다. ")
