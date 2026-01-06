@@ -1,21 +1,23 @@
 import csv
-from enum import member
-
-from models import *
+from models import Book, Member, Library
 
 def load_csv(filename, library):
     print("")
-    with open(filename, 'r', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        header = next(reader)
-        for row in reader:
-            book = Book(
-                title=row[0],
-                author=row[1],
-                isbn=row[2]
-            )
-            library.add_book(book)
-
+    try:
+        with open(filename, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            header = next(reader)
+            for row in reader:
+                book = Book(
+                    title=row[0],
+                    author=row[1],
+                    isbn=row[2]
+                )
+                library.add_book(book)
+    except FileNotFoundError:
+        print(f">> 오류 : {filename} 을 찾을 수 없습니다.")
+    except Exception as e:
+        print(f">> 파일 로드 중 오류 발생.")
 def register_book(library):
     print("")
     print("[도서 등록 시스템]")
@@ -72,6 +74,7 @@ def main():
 
     library = Library()
 
+    load_csv('books.csv', library)
     print("[System] books.csv 에서 도서 데이터를 불러왔습니다.")
     print("")
     print("=== 도서관 관리 시스템 ===")
@@ -82,7 +85,7 @@ def main():
     print("5. 반납")
     print("6. 검색")
     print("7. 종료")
-    load_csv('books.csv', library)
+
     while True:
         choice = input("메뉴를 선택하세요 : ")
         if choice == "1":
@@ -107,7 +110,7 @@ def main():
             break
         else:
             print("잘못된 메뉴입니다.")
-            break
+
 
 if __name__ == '__main__':
         main()
