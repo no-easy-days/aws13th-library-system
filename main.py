@@ -73,7 +73,7 @@ while True:
 
     elif sel == "6":
         print("검색")
-        search = input("")
+        search = input("검색할 도서 제목을 입력하세요: ")
         for search_title in new_lib.books:
             if search in search_title.title:
                 print(search_title)

@@ -54,7 +54,6 @@ class Library:
         return
 
     def return_book(self, isbn, user_name):
-        i = None
         for book in self.books:
             if book.isbn == isbn:
                 if book.is_borrowed:
@@ -69,8 +68,9 @@ class Library:
                             if book in member.borrowed_books:
                                 member.borrowed_books.remove(book)
 
-                    break
+                    return
                 else:
                     print("반납할 책이 없습니다.")
-                return
-            print(f"ISBN '{isbn}'에 해당하는 책을 찾을 수 없습니다.")
+                    return
+
+        print(f"ISBN '{isbn}'에 해당하는 책을 찾을 수 없습니다.")
