@@ -38,6 +38,8 @@ class Library:
 
     # 3. 회원 등록
     def add_member(self, member):
+        if member.name in self.members:
+            raise ValueError("이미 등록된 회원입니다.")
         self.members[member.name] = member
 
     # 4. 대출
