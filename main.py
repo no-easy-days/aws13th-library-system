@@ -6,18 +6,24 @@ def load_csv(filename, library):
     try:
         with open(filename, 'r', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
-            header = next(reader)
+            _ = next(reader)
             for row in reader:
+                if len(row) <3:
+                    print(f">> 경고: 잘못된 CSV 행을 건너뜁니다:  {row}")
+                    continue
                 book = Book(
                     title=row[0],
                     author=row[1],
                     isbn=row[2]
                 )
                 library.add_book(book)
+        return True
     except FileNotFoundError:
         print(f">> 오류 : {filename} 을 찾을 수 없습니다.")
+        return False
     except Exception as e:
         print(f">> 파일 로드 중 오류 발생.")
+        return False
 def register_book(library):
     print("")
     print("[도서 등록 시스템]")
@@ -74,8 +80,8 @@ def main():
 
     library = Library()
 
-    load_csv('books.csv', library)
-    print("[System] books.csv 에서 도서 데이터를 불러왔습니다.")
+    if load_csv('books.csv', library):
+        print("[System] books.csv 에서 도서 데이터를 불러왔습니다.")
     print("")
     print("=== 도서관 관리 시스템 ===")
     print("1. 도서 등록")
