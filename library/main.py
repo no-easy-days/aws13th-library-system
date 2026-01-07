@@ -4,11 +4,17 @@ import io_print as io
 
 
 def load_books(library):
-    with open("books.csv", newline="", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        next(reader)
-        for title, author, isbn in reader:
-            library.add_book(Book(title, author, isbn))
+    try:
+        with open("books.csv", newline="", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if len(row) == 3:
+                    title, author, isbn = row
+                    library.add_book(Book(title, author, isbn))
+    except FileNotFoundError:
+        print(">> books.csv 파일을 찾을 수 없습니다.")
+    except csv.Error as e:
+        print(f">> CSV 오류: {e}")
 
 
 def main():
@@ -60,6 +66,9 @@ def main():
             elif choice == 6:
                 print("[도서 검색]")
                 keyword = input("검색어: ")
+                if not keyword.strip():
+                    io.print_message("검색어를 입력해주세요.")
+                    continue
                 io.list_book(library.search_book(keyword))
 
             elif choice == 7:

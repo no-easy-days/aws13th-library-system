@@ -18,6 +18,7 @@ def add_book():
 def list_book(books):
     if not books:
         print("도서가 없습니다.")
+        return
     for book in books:
         print(book)
 

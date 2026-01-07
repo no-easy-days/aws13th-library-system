@@ -26,11 +26,15 @@ class Library:
         return name in self.members
     # 1. 도서 등록
     def add_book(self, book):
+        for b in self.books:
+            if b.isbn == book.isbn:
+                raise ValueError("이미 등록된 ISBN입니다.")
         self.books.append(book)
 
     # 2. 도서 목록
     def list_book(self):
-        return self.books
+        return list(self.books)
+
 
     # 3. 회원 등록
     def add_member(self, member):
@@ -69,6 +73,9 @@ class Library:
                 break
         if book is None or not book.is_borrowed:
             raise ValueError("반납할 수 없는 책입니다.")
+
+        if book not in member.borrowed_books:
+            raise ValueError("이 회원이 대출한 책이 아닙니다.")
 
         book.is_borrowed = False
         member.borrowed_books.remove(book)
