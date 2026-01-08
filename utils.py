@@ -1,4 +1,5 @@
-#isbn이 잘못되었을 때 발생하는 사용자 정의 예외
+# 도서관 시스템 사용자 정의 예외 계층
+
 class LibraryError(Exception):
     """도서관 시스템 기본 예외 클래스"""
     pass

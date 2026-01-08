@@ -1,7 +1,10 @@
 import csv
 from datetime import datetime, timedelta
-from utils import InvalidISBNError
+from utils import InvalidISBNError, DuplicateDataError
 
+ISBN_ERROR_MSG = "[SYSTEM] ISBN은 반드시 13자리 숫자여야 합니다."
+DUPLICATE_ISBN_ERROR_MSG= "[SYSTEM] 이미 등록된 책의 ISBN입니다"
+DUPLICATE_MEMBER_ERROR_MSG = "[SYSTEM] 이미 등록된 회원입니다"
 """
 Book 클래스
 """
@@ -11,11 +14,9 @@ class Book:
         self.title=title
         self.author=author
         if not (isbn.isdigit() and len(isbn) == 13):
-            raise InvalidISBNError("[SYSTEM] ISBN은 반드시 13자리 숫자여야 합니다.")
+            raise InvalidISBNError(ISBN_ERROR_MSG)
         self.isbn=isbn
         self.is_loaned= False
-        self.loan_date = None
-        self.due_date = None
 
     # def loan_book(self):
     def to_dict(self):
@@ -26,12 +27,6 @@ class Book:
             "isbn": self.isbn,
             "is_loaned": self.is_loaned
         }
-
-    def is_overdue(self):
-        if self.is_loaned and self.due_date and datetime.now() > self.due_date:
-            return True
-        return False
-
 
 """
 Member 클래스
@@ -50,7 +45,10 @@ class Member:
             print(f"{b.title}")
 
     def remove_book(self,book):
-        self.loaned_book.remove(book)
+        try:
+            self.loaned_book.remove(book)
+        except ValueError:
+            print(f"[SYSTEM] 경고: {book.title}이(가) 대출 목록에 없습니다.")
 
     def to_dict(self):
         # CSV에 저장할 수 있도록 dict로 변환
@@ -106,8 +104,8 @@ class Library:
                 fieldnames = ["member_name", "isbn", "loan_date", "due_date", "is_returned"]
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
-                for l in self.loans:
-                    writer.writerow(l.to_dict())
+                for ln in self.loans:
+                    writer.writerow(ln.to_dict())
 
     def set_book(self, file_path):
         self.book_file_path = file_path
@@ -120,7 +118,9 @@ class Library:
                     my_book.is_loaned = row["is_loaned"] == "True"
                     self.library_book.append(my_book)
         except FileNotFoundError:
-            pass
+            print(f"[SYSTEM] 파일을 찾을 수 없습니다: {file_path}")
+        except (csv.Error, UnicodeDecodeError, KeyError) as e:
+            print(f"[SYSTEM] 파일 로드 중 오류 발생: {e}")
 
     def set_loan(self, file_path):
         self.loan_file_path = file_path
@@ -129,6 +129,8 @@ class Library:
                 reader = csv.DictReader(f)
                 for row in reader:
                     loan = Loan(row["member_name"], row["isbn"])
+                    loan.loan_date = datetime.strptime(row["loan_date"], "%Y-%m-%d")
+                    loan.due_date = datetime.strptime(row["due_date"], "%Y-%m-%d")
                     loan.is_returned = row["is_returned"] == "True"
                     self.loans.append(loan)
 
@@ -139,7 +141,9 @@ class Library:
                         if m and b:
                             m.add_book(b)
         except FileNotFoundError:
-            pass
+            print(f"[SYSTEM] 파일을 찾을 수 없습니다: {file_path}")
+        except (csv.Error, UnicodeDecodeError, KeyError) as e:
+            print(f"[SYSTEM] 파일 로드 중 오류 발생: {e}")
 
     def return_loan(self, member_name, isbn):
         """반납 처리 및 파일 갱신"""
@@ -157,14 +161,13 @@ class Library:
                 fieldnames = ["member_name", "isbn", "loan_date", "due_date", "is_returned"]
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
-                for l in self.loans:
-                    writer.writerow(l.to_dict())
+                for ln in self.loans:
+                    writer.writerow(ln.to_dict())
 
     def add_book(self,book):
         for b in self.library_book:
             if b.isbn == book.isbn:
-                print(f"[SYSTEM] 이미 등록된 책의 ISBN입니다: {b.isbn}")
-                return
+                raise DuplicateDataError(DUPLICATE_ISBN_ERROR_MSG)
 
         self.library_book.append(book)
         if self.book_file_path:
@@ -185,14 +188,13 @@ class Library:
                     self.library_members.append(my_member)
         except FileNotFoundError:
             print(f"[SYSTEM] 파일을 찾을 수 없습니다: {file_path}")
-        except Exception as e:
+        except (csv.Error, UnicodeDecodeError, KeyError) as e:
             print(f"[SYSTEM] 파일 로드 중 오류 발생: {e}")
 
     def add_member(self,member):
         for m in self.library_members:
             if m.name == member.name or m.phone == member.phone:
-                print(f"[SYSTEM] 이미 등록된 회원입니다: {m.name}, {m.phone}")
-                return False
+                raise DuplicateDataError(DUPLICATE_MEMBER_ERROR_MSG)
 
         self.library_members.append(member)
         if self.member_file_path:

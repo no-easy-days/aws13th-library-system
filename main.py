@@ -52,7 +52,7 @@ while True:
                   print(e)
 
       # 도서 출력 매뉴, library 객체에 저장되어있는 book객체의 값을 모두 출력
-      elif int(userInput)== 2:
+      elif userInput == 2:
           print("도서 출력 메뉴 입니다. 도서관에 소장하고 있는 모든 목록을 불러옵니다.")
           print(f"도서관 file_path - {my_library.book_file_path}")
           my_library.show_library()
