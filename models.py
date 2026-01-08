@@ -13,8 +13,6 @@ class Book:
         return f"{self.title} {self.author} {self.isbn} {self.is_borrowed}"
 
 class Member:
-    borrowed_books = False
-
     def __init__(self, name, phone, borrowed_books):
         self.name = name
         self.phone = phone
