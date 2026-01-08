@@ -9,7 +9,7 @@ class Book:
         if self.is_borrowed:
             status = "대출 중"
         else:
-            status = "대충 가능"
+            status = "대출 가능"
         return f'[{self.isbn}] {self.title} / {self.author} ({status})'
 
 #
@@ -34,7 +34,7 @@ class Library:
     def list_books(self):
         return self.books
 
-    # 화원
+    # 회원
     def add_member(self, member):
         self.members[member.name] = member
 

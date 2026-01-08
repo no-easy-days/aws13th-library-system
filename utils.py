@@ -26,5 +26,7 @@ def load_books_from_csv(filename):
             for row in reader:
                 books.append(Book(row["title"], row["author"], row["isbn"]))
     except FileNotFoundError:
-        print("books.csv 파일이 없습니다.")
+        print(f"{filename} 파일이 없습니다.")
+    except Exception as e:
+        print(f"{filename} 파일 로드 중 오류 발생 : {e}")
     return books
