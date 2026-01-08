@@ -59,7 +59,6 @@ class Member:
             "phone": self.phone
         }
 
-
 class Loan:
     def __init__(self, member_name, isbn):
         self.member_name = member_name
@@ -90,16 +89,15 @@ class Library:
         self.member_file_path = None
         self.loan_file_path = None
 
-    def set_loan(self, file_path):
-        self.loan_file_path = file_path
-        with open(file_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                loan = Loan(row["member_name"], row["isbn"])
-                loan.loan_date = datetime.strptime(row["loan_date"], "%Y-%m-%d")
-                loan.due_date = datetime.strptime(row["due_date"], "%Y-%m-%d")
-                loan.is_returned = (row["is_returned"].lower() == "true")
-                self.loans.append(loan)
+    def save_all_books(self):
+        """도서 목록 전체를 CSV에 저장 (상태 업데이트용)"""
+        if self.book_file_path:
+            with open(self.book_file_path, 'w', newline='', encoding='utf-8') as f:
+                fieldnames = ["title", "author", "isbn", "is_loaned"]
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                for b in self.library_book:
+                    writer.writerow(b.to_dict())
 
     def add_loan(self, loan):
         self.loans.append(loan)
@@ -111,15 +109,6 @@ class Library:
                 for l in self.loans:
                     writer.writerow(l.to_dict())
 
-    def return_loan(self, member_name, isbn):
-        for loan in self.loans:
-            if loan.member_name == member_name and loan.isbn == isbn and not loan.is_returned:
-                loan.is_returned = True
-                print(f"[SYSTEM] {member_name}님이 ISBN {isbn} 책을 반납했습니다.")
-                self.add_loan(loan)  # CSV 갱신
-                return
-        print("[SYSTEM] 해당 대출 기록을 찾을 수 없습니다.")
-
     def set_book(self, file_path):
         self.book_file_path = file_path
         try:
@@ -127,11 +116,49 @@ class Library:
                 reader = csv.DictReader(f)
                 for row in reader:
                     my_book = Book(row["title"], row["author"], row["isbn"])
+                    # CSV의 문자열 "True"/"False"를 불리언으로 변환
+                    my_book.is_loaned = row["is_loaned"] == "True"
                     self.library_book.append(my_book)
         except FileNotFoundError:
-            print(f"[SYSTEM] 파일을 찾을 수 없습니다: {file_path}")
-        except Exception as e:
-            print(f"[SYSTEM] 파일 로드 중 오류 발생: {e}")
+            pass
+
+    def set_loan(self, file_path):
+        self.loan_file_path = file_path
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    loan = Loan(row["member_name"], row["isbn"])
+                    loan.is_returned = row["is_returned"] == "True"
+                    self.loans.append(loan)
+
+                    # [중요] 프로그램 시작 시 대출 중인 책을 회원에게 연결
+                    if not loan.is_returned:
+                        m = next((m for m in self.library_members if m.name == loan.member_name), None)
+                        b = next((b for b in self.library_book if b.isbn == loan.isbn), None)
+                        if m and b:
+                            m.add_book(b)
+        except FileNotFoundError:
+            pass
+
+    def return_loan(self, member_name, isbn):
+        """반납 처리 및 파일 갱신"""
+        for loan in self.loans:
+            if loan.member_name == member_name and loan.isbn == isbn and not loan.is_returned:
+                loan.is_returned = True
+                self.update_loan_file()
+                return True
+        return False
+
+    def update_loan_file(self):
+        """대출 목록 전체 갱신"""
+        if self.loan_file_path:
+            with open(self.loan_file_path, 'w', newline='', encoding='utf-8') as f:
+                fieldnames = ["member_name", "isbn", "loan_date", "due_date", "is_returned"]
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                for l in self.loans:
+                    writer.writerow(l.to_dict())
 
     def add_book(self,book):
         for b in self.library_book:

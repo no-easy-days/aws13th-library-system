@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 from models import Book, Member, Library, Loan
 import utils
 
@@ -68,57 +67,50 @@ while True:
           if my_library.add_member(my_member):
             print("회원 정보가 성공적으로 등록되었습니다.")
 
-      elif userInput== 4:
-          print("도서 대출 매뉴입니다, 책을 대출하려면 회원이름과, 대출할 책의 isbn을 입력해 주세요")
+      elif userInput == 4:  # 도서 대출
+          print("도서 대출 메뉴입니다.")
           member_name = input("회원의 이름을 입력하세요 : ")
           book_isbn = input("대출할 책의 isbn을 입력하세요 :")
 
-          # 회원 찾기
           member = next((m for m in my_library.library_members if m.name == member_name), None)
-          if not member:
-              print("[SYSTEM] 해당 회원이 존재하지 않습니다.")
-              continue
-
-          # 책 찾기
           book = next((b for b in my_library.library_book if b.isbn == book_isbn), None)
-          if not book:
-              print("[SYSTEM] 해당 ISBN의 책이 존재하지 않습니다.")
+
+          if not member or not book:
+              print("[SYSTEM] 회원 또는 도서 정보를 확인하세요.")
               continue
 
-          # 대출 상태 확인
           if book.is_loaned:
               print("[SYSTEM] 이미 대출 중인 책입니다.")
           else:
+              # 상태 변경
               book.is_loaned = True
-              book.loan_date = datetime.now()
-              book.due_date = book.loan_date + timedelta(days=7)
+              # Loan 객체 생성 및 리스트 추가 (여기서 파일 저장까지 발생)
+              new_loan = Loan(member.name, book.isbn)
+              my_library.add_loan(new_loan)
               member.add_book(book)
+              # 중요: 도서 상태(is_loaned)가 변했으므로 도서 파일도 갱신
+              my_library.save_all_books()
+              print(f"[SYSTEM] {member.name}님, '{book.title}' 대출 완료.")
 
-              # Loan 객체 생성 후 추가
-              loan = Loan(member.name, book.isbn)
-              my_library.add_loan(loan)
-
-              print(f"[SYSTEM] {member.name}님이 '{book.title}'을 대출했습니다. 반납 예정일: {loan.due_date.strftime('%Y-%m-%d')}")
-
-      elif userInput== 5:
-          print("도서 반납 매뉴입니다, 책을 반납하려면 회원이름과, 반납할 책의 isbn을 입력해 주세요")
+      elif userInput == 5:  # 도서 반납
+          print("도서 반납 메뉴입니다.")
           member_name = input("회원의 이름을 입력하세요 : ")
           book_isbn = input("반납할 책의 isbn을 입력하세요 :")
 
-          member = next((m for m in my_library.library_members if m.name == member_name), None)
-          if not member:
-              print("[SYSTEM] 해당 회원이 존재하지 않습니다.")
-              continue
+          # Library의 return_loan 메서드를 호출하여 파일과 객체 상태를 한꺼번에 관리
+          success = my_library.return_loan(member_name, book_isbn)
 
-          book = next((b for b in member.loaned_book if b.isbn == book_isbn), None)
-          if not book:
-              print("[SYSTEM] 해당 회원이 대출한 책이 아닙니다.")
-              continue
-
-          book.is_loaned = False
-          member.remove_book(book)
-          print(f"[SYSTEM] {member.name}님이 '{book.title}'을 반납했습니다.")
-
+          if success:
+              # 메모리 상의 객체 상태 업데이트
+              member = next((m for m in my_library.library_members if m.name == member_name), None)
+              book = next((b for b in my_library.library_book if b.isbn == book_isbn), None)
+              if member and book:
+                  book.is_loaned = False
+                  member.remove_book(book)
+                  my_library.save_all_books()  # 도서 파일 갱신
+                  print(f"[SYSTEM] {member.name}님, '{book.title}' 반납 완료.")
+          else:
+              print("[SYSTEM] 반납 실패: 대출 기록을 찾을 수 없습니다.")
 
       elif userInput== 6:
           print("도서 검색의 매뉴입니다")
@@ -128,6 +120,7 @@ while True:
       elif userInput== 7:
           print("프로그램을 종료합니다.")
           break
+
       else:
           print("[SYSTEM] 1~7까지의 숫자만 입력하세요")
     except ValueError:
